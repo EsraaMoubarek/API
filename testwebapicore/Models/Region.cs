@@ -13,7 +13,6 @@ namespace testwebapicore.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public string NameArabic { get; set; }
 
         public virtual ICollection<Address> Address { get; set; }
         public virtual ICollection<Schedule> Schedule { get; set; }

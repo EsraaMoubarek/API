@@ -5,6 +5,11 @@ namespace testwebapicore.Models
 {
     public partial class Request
     {
+        public Request()
+        {
+            ScheduleCollector = new HashSet<ScheduleCollector>();
+        }
+
         public int Id { get; set; }
         public int? ApartmentNumber { get; set; }
         public int? ClientId { get; set; }
@@ -22,5 +27,6 @@ namespace testwebapicore.Models
         public virtual Client Client { get; set; }
         public virtual User Collector { get; set; }
         public virtual Schedule Schedule { get; set; }
+        public virtual ICollection<ScheduleCollector> ScheduleCollector { get; set; }
     }
 }
