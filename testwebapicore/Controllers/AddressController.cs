@@ -36,5 +36,20 @@ namespace testwebapicore.Controllers
             else
                 return NotFound("This Region was not found");
         }
+       
+
+        public IEnumerable<string> GetStreets(int Id)
+        {
+            return _addressRepo.streets(Id);
+        }
+        
+        public IEnumerable<Address> GetAddress(int Id)
+        {
+            return _addressRepo.AddressIdAndStrs(Id);
+        }
+        public int GetAddressId(int rId, string stN)
+        {
+            return _addressRepo.AddressId(stN, rId);
+        }
     }
 }

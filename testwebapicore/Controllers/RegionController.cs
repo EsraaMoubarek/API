@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using testwebapicore.Models;
 using testwebapicore.Models.repo;
 
 namespace testwebapicore.Controllers
@@ -23,6 +24,10 @@ namespace testwebapicore.Controllers
 
             return Ok(r.GetRegions());
            
+        }
+        public IEnumerable<Region> GetRegion()
+        {
+            return r.AllRegions();
         }
     }
 }
