@@ -27,5 +27,15 @@ namespace testwebapicore.Models.repo
             return Rgns;
         }
 
+        //return object with regionId and nameArabic
+        public object getObjectById(int id)
+        {
+            return db.Region.Where(a => a.Id == id).Select(b => new { RegionId = b.Id, NameArabic = b.NameArabic });
+        }
+        //return region name only
+        public Region getById(int id)
+        {
+            return db.Region.Where(a => a.Id == id).Select(b => new Region { Name = b.Name }).First();
+        }
     }
 }

@@ -113,5 +113,10 @@ namespace testwebapicore.Models.repo
             return requests;
         }
 
+        //return object of addressId and buildingNo only
+        public List<object> getListByScheduleId(int schId)
+        {
+            return _db.Request.Where(x => x.ScheduleId == schId).Select(a => new { BuildingNumber = (int)a.BuildingNumber, AddressId = (int)a.AddressId, }).ToList<object>();
+        }
     }
 }
