@@ -17,5 +17,9 @@ namespace testwebapicore.Models.repo
         {
             return db.Region.ToList();
         }
+        public Region GetRegionById(int regionId)
+        {
+            return db.Region.SingleOrDefault(r => r.Id == regionId);
+        }
     }
 }

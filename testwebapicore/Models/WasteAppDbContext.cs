@@ -40,7 +40,7 @@ namespace testwebapicore.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=.;Database= WasteAppDb;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=.;Database=WasteAppDb;Trusted_Connection=True;");
             }
         }
 
@@ -51,26 +51,30 @@ namespace testwebapicore.Models
                 entity.HasIndex(e => e.RegionId)
                     .HasName("FK");
 
-                entity.Property(e => e.Governorate)
-                    .HasMaxLength(50)
+                entity.Property(e => e.StreetName)
+                    .IsRequired()
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.StreetName)
-                    .HasMaxLength(50)
+                entity.Property(e => e.StreetNameArabic)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Region)
                     .WithMany(p => p.Address)
                     .HasForeignKey(d => d.RegionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Address_Region");
             });
 
             modelBuilder.Entity<Client>(entity =>
             {
-                entity.HasIndex(e => new { e.AddressId, e.CategoryId })
-                    .HasName("FK");
+                entity.HasIndex(e => e.Mobile)
+                    .HasName("FK")
+                    .IsUnique();
 
                 entity.Property(e => e.ClientName)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -87,16 +91,19 @@ namespace testwebapicore.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Mobile)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Password)
-                    .HasMaxLength(50)
+                    .IsRequired()
+                    .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Address)
                     .WithMany(p => p.Client)
                     .HasForeignKey(d => d.AddressId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Client_Address");
 
                 entity.HasOne(d => d.Category)
@@ -122,6 +129,12 @@ namespace testwebapicore.Models
                 entity.Property(e => e.ClientId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.ClientPromotions)
+                    .HasForeignKey(d => d.ClientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ClientPromotions_Client");
 
                 entity.HasOne(d => d.Promotion)
                     .WithMany(p => p.ClientPromotions)
@@ -182,6 +195,11 @@ namespace testwebapicore.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.PromotionCodes)
+                    .HasForeignKey(d => d.ClientId)
+                    .HasConstraintName("FK_PromotionCodes_Client");
+
                 entity.HasOne(d => d.Promtion)
                     .WithMany(p => p.PromotionCodes)
                     .HasForeignKey(d => d.PromtionId)
@@ -211,7 +229,13 @@ namespace testwebapicore.Models
 
             modelBuilder.Entity<Region>(entity =>
             {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NameArabic)
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
@@ -221,6 +245,11 @@ namespace testwebapicore.Models
                 entity.HasIndex(e => new { e.ClientId, e.ScheduleId, e.AddressId, e.CollectorId })
                     .HasName("FK");
 
+                entity.HasOne(d => d.Address)
+                    .WithMany(p => p.Request)
+                    .HasForeignKey(d => d.AddressId)
+                    .HasConstraintName("FK_Request_Address");
+
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.Request)
                     .HasForeignKey(d => d.ClientId)
@@ -229,11 +258,12 @@ namespace testwebapicore.Models
                 entity.HasOne(d => d.Collector)
                     .WithMany(p => p.Request)
                     .HasForeignKey(d => d.CollectorId)
-                    .HasConstraintName("FK_Request_User1");
+                    .HasConstraintName("FK_Request_User");
 
                 entity.HasOne(d => d.Schedule)
                     .WithMany(p => p.Request)
                     .HasForeignKey(d => d.ScheduleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Request_Schedule");
             });
 
@@ -247,8 +277,6 @@ namespace testwebapicore.Models
 
             modelBuilder.Entity<Schedule>(entity =>
             {
-                entity.Property(e => e.Date).HasColumnType("datetime");
-
                 entity.Property(e => e.Time).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Driver)
@@ -303,6 +331,12 @@ namespace testwebapicore.Models
                     .HasForeignKey(d => d.QuestionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ServeyUsers_SurveyQuestions");
+
+                entity.HasOne(d => d.Survey)
+                    .WithMany(p => p.ServeyUsers)
+                    .HasForeignKey(d => d.SurveyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ServeyUsers_Survey");
             });
 
             modelBuilder.Entity<Survey>(entity =>

@@ -12,8 +12,7 @@ namespace testwebapicore.Models
         }
 
         public int Id { get; set; }
-        public DateTime? Date { get; set; }
-        public DateTime? Time { get; set; }
+        public DateTime Time { get; set; }
         public int? DriverId { get; set; }
         public int? RegionId { get; set; }
 

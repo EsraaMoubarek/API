@@ -12,5 +12,6 @@ namespace testwebapicore.Models
 
         public virtual Client Client { get; set; }
         public virtual SurveyQuestions Question { get; set; }
+        public virtual Survey Survey { get; set; }
     }
 }

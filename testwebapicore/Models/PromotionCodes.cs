@@ -9,6 +9,7 @@ namespace testwebapicore.Models
         public int PromtionId { get; set; }
         public string Code { get; set; }
 
+        public virtual Client Client { get; set; }
         public virtual Promotions Promtion { get; set; }
     }
 }
