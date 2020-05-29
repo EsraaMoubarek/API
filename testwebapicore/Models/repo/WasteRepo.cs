@@ -24,6 +24,17 @@ namespace testwebapicore.Models.repo
 
             return AvgTotalPrice;
         }
-
+        public List<Waste> Wastes()
+        {
+            List<Waste> wastes = _db.Waste.Select(a => new Waste { Id = a.Id, Name = a.Name, Price = a.Price }).ToList();
+            return wastes;
+        }
+        public Waste edit(Waste w)
+        {
+            Waste waste = _db.Waste.SingleOrDefault(a => a.Id == w.Id);
+            waste.Price = w.Price;
+            _db.SaveChanges();
+            return waste;
+        }
     }
 }
