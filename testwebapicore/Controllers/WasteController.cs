@@ -9,17 +9,21 @@ using testwebapicore.Models.repo;
 
 namespace testwebapicore.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class WasteController : ControllerBase
     {
         WasteRepo _wasteRepo;
+        public WasteController(WasteRepo wasteRepo)
+        {
+            _wasteRepo = wasteRepo;
+        }
         public decimal? GetSelectWasteToCalcAvgTotPrice()
         {
 
             return _wasteRepo.SelectWasteToCalcAvgTotPrice();
         }
-        public List<Waste> GetWastesData()
+        public List<Waste> GetWasteData()
         {
             return _wasteRepo.Wastes();
         }
