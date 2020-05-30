@@ -25,7 +25,7 @@ namespace testwebapicore.Models
         public int BuildingNumber { get; set; }
         public int ApartmentNumber { get; set; }
         public int? TotalPoints { get; set; }
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
         public virtual Address Address { get; set; }
         public virtual ClientCategory Category { get; set; }
