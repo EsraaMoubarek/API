@@ -10,10 +10,10 @@ namespace testwebapicore.Controllers
 {
     
     [ApiController]
-    public class DriversController : ControllerBase
+    public class AdminController : ControllerBase
     {
         UserRepo u;
-        public DriversController(UserRepo u)
+        public AdminController(UserRepo u)
         {
             this.u = u;
         }
