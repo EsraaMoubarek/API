@@ -40,7 +40,7 @@ namespace testwebapicore.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=.;Database=WasteAppDb;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=.;Database= WasteAppDb;Trusted_Connection=True;");
             }
         }
 
@@ -52,25 +52,29 @@ namespace testwebapicore.Models
                     .HasName("FK");
 
                 entity.Property(e => e.StreetName)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.StreetNameAeabic)
+                entity.Property(e => e.StreetNameArabic)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Region)
                     .WithMany(p => p.Address)
                     .HasForeignKey(d => d.RegionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Address_Region");
             });
 
             modelBuilder.Entity<Client>(entity =>
             {
-                entity.HasIndex(e => new { e.AddressId, e.CategoryId })
-                    .HasName("FK");
+                entity.HasIndex(e => e.Mobile)
+                    .HasName("FK")
+                    .IsUnique();
 
                 entity.Property(e => e.ClientName)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -87,11 +91,13 @@ namespace testwebapicore.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Mobile)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Password)
-                    .HasMaxLength(50)
+                    .IsRequired()
+                    .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Address)
@@ -103,7 +109,6 @@ namespace testwebapicore.Models
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Client)
                     .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Client_ClientCategory");
             });
 
@@ -224,7 +229,13 @@ namespace testwebapicore.Models
 
             modelBuilder.Entity<Region>(entity =>
             {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NameArabic)
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
@@ -286,12 +297,6 @@ namespace testwebapicore.Models
                 entity.ToTable("Schedule_Collector");
 
                 entity.HasOne(d => d.Collector)
-                    .WithMany(p => p.ScheduleCollector)
-                    .HasForeignKey(d => d.CollectorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Schedule_Collector_Request");
-
-                entity.HasOne(d => d.CollectorNavigation)
                     .WithMany(p => p.ScheduleCollector)
                     .HasForeignKey(d => d.CollectorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -400,7 +405,6 @@ namespace testwebapicore.Models
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
-                    .IsRequired()
                     .HasColumnName("name")
                     .HasMaxLength(50)
                     .IsUnicode(false);
