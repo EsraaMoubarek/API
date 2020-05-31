@@ -95,11 +95,15 @@ namespace testwebapicore.Models.repo
             _db.SaveChanges();
             return requestofclient;
 
+<<<<<<< HEAD
+
+=======
         }
         public object CollectorProfile(int ColectorID)
         {
             return _db.User.Where(c => c.Id == ColectorID).Select(c => new { c.UserName, c.PhoneNumber, c.Email });
         }
         #endregion
+>>>>>>> 881260d53f2014af9f9d51a2465d94fc74379062
     }
 }
