@@ -16,6 +16,14 @@ namespace testwebapicore.Models.repo
         {
             return _db.User.ToList();
         }
+        public User addUser(User u)
+        {
+            _db.User.Add(u);
+            _db.SaveChanges();
+            return u;
+        }
+       
+
 
         /////////
         public void RegisterApartment(Client client)

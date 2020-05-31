@@ -7,6 +7,7 @@ using testwebapicore.Models.repo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
 namespace testwebapicore.Controllers
 {
@@ -72,7 +73,7 @@ namespace testwebapicore.Controllers
             return new string[] { "John Doe", "Jane Doe" };
         }
 
-        ///******** Reqiest Part ********/// 
+        ///******** Request Part ********/// 
         /// 
         /// <summary>
         /// ////////////// Requests List 
@@ -150,6 +151,34 @@ namespace testwebapicore.Controllers
         public ActionResult DeleteRequest(int id)
         {
             return Ok(_db.DeleteRequest(id));
+        }
+
+
+        ///******** Promotion Part ********/// 
+        /// 
+        /// <summary>
+        /// ////////////// Promotions List 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult getPromotions() {
+
+            return Ok(_db.getPromotions());
+        }
+
+        [HttpPost]
+        public ActionResult AddClientPromotion([FromBody]PromotionCodes clientPromotion) { 
+            //clientPromotion.TakeDate = DateTime.Now; 
+            
+            return Ok(_db.AddClientPromotion(clientPromotion));
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public ActionResult GetMyPromotions(int id) {
+
+
+            return Ok(_db.GetMyPromotions(id));
         }
     }
 }

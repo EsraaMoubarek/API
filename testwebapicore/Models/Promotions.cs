@@ -7,7 +7,6 @@ namespace testwebapicore.Models
     {
         public Promotions()
         {
-            ClientPromotions = new HashSet<ClientPromotions>();
             PromotionCodes = new HashSet<PromotionCodes>();
         }
 
@@ -20,7 +19,6 @@ namespace testwebapicore.Models
         public int? CompanyId { get; set; }
 
         public virtual ComapnyPromotion Company { get; set; }
-        public virtual ICollection<ClientPromotions> ClientPromotions { get; set; }
         public virtual ICollection<PromotionCodes> PromotionCodes { get; set; }
     }
 }
