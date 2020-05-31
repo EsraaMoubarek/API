@@ -10,10 +10,10 @@ namespace testwebapicore.Controllers
 {
     
     [ApiController]
-    public class DriversController : ControllerBase
+    public class AdminController : ControllerBase
     {
         UserRepo u;
-        public DriversController(UserRepo u)
+        public AdminController(UserRepo u)
         {
             this.u = u;
         }
@@ -22,7 +22,7 @@ namespace testwebapicore.Controllers
         {
 
 
-            return Ok(u.GetUsers().Where(a=>a.RoleId==1));
+            return Ok(u.GetUsers().Where(a=>a.Role.Role1=="driver"));
 
         }
         [Route("collector")]
@@ -31,7 +31,7 @@ namespace testwebapicore.Controllers
         {
 
 
-            return Ok(u.GetUsers().Where(a => a.RoleId == 2));
+            return Ok(u.GetUsers().Where(a => a.Role.Role1 == "collector"));
 
         }
     }
