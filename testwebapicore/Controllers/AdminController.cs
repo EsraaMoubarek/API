@@ -40,7 +40,8 @@ namespace testwebapicore.Controllers
         [HttpPost]
         public ActionResult adddriver(User added)
         {
-            added.Role.Role1 = "driver";
+            added.RoleId = 4;
+            //added.Role.Role1 = "driver";
 
             return Ok(u.addUser(added));
 
@@ -52,7 +53,9 @@ namespace testwebapicore.Controllers
         [HttpPost]
         public ActionResult addcol(User added)
         {
-            added.Role.Role1 = "collector";
+            //added.Role.Role1 = "collector";
+            added.RoleId = 3;
+
 
             return Ok(u.addUser(added));
 
