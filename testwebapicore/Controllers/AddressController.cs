@@ -10,7 +10,7 @@ using testwebapicore.Models.repo;
 
 namespace testwebapicore.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AddressController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace testwebapicore.Controllers
             _regionRepo = regionRepo;
         }
 
-        [Route("addrsbyreg")]
+        [Route("/api/[controller]/addrsbyreg")]
         public IActionResult GetAddressByRegionId(int regionId)
         {
             Region region = _regionRepo.GetRegionById(regionId);
@@ -38,17 +38,14 @@ namespace testwebapicore.Controllers
                 return NotFound("This Region was not found");
         }
        
-        [Route("streets")]
         public IEnumerable<string> GetStreets(int Id)
         {
             return _addressRepo.streets(Id);
         }
-        [Route("addresses")]
         public IEnumerable<Address> GetAddress(int Id)
         {
             return _addressRepo.AddressIdAndStrs(Id);
         }
-        [Route("addressid")]
         public int GetAddressId(int rId, string stN)
         {
             return _addressRepo.AddressId(stN, rId);
