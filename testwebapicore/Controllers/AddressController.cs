@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using testwebapicore.Models;
 using testwebapicore.Models.repo;
 
@@ -37,16 +38,17 @@ namespace testwebapicore.Controllers
                 return NotFound("This Region was not found");
         }
        
-
+        [Route("streets")]
         public IEnumerable<string> GetStreets(int Id)
         {
             return _addressRepo.streets(Id);
         }
-        
+        [Route("addresses")]
         public IEnumerable<Address> GetAddress(int Id)
         {
             return _addressRepo.AddressIdAndStrs(Id);
         }
+        [Route("addressid")]
         public int GetAddressId(int rId, string stN)
         {
             return _addressRepo.AddressId(stN, rId);
