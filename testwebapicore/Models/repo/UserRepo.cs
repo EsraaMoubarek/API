@@ -53,7 +53,56 @@ namespace testwebapicore.Models.repo
             List<ClientCategory> category = _db.ClientCategory.Select(a => new ClientCategory { Id = a.Id, Name = a.Name }).ToList();
             return category;
         }
+        #region Collector
+        public List<ClientListModel> GetClientList(int CollectorID)
+        {
+            List<ClientListModel> clientLists = new List<ClientListModel>();
+            var Clients = _db.Request.Where(c => c.CollectorId == CollectorID).
+                Select(a =>
+            new ClientListModel
+            {
+                ClientID = a.Client.Id, //to add weight
+                ClientFirstName = a.Client.FirstName,
+                ClientLastName = a.Client.LastName,
+                ClientApartmentNumber = a.ApartmentNumber,
+                ClientBuildingNumber = a.BuildingNumber,
+                //ClientStreetName = a.Address.StreetName,
+                //ClientRegionName = a.Address.Region.Name,
+                ClientStreetName = a.Address.StreetNameArabic,
+                ClientRegionName = a.Address.Region.NameArabic,
+                Date = a.Schedule.Time,
+                ScheduleID = a.Schedule.Id,//to add weight
+            });
 
+            foreach (var client in Clients)
+            {
 
+                if (client.Date.ToString("yyyy/MM/dd") == DateTime.Now.ToString("yyyy/MM/dd"))
+                {
+                    clientLists.Add(client);
+                }
+            }
+            return clientLists;
+        }
+
+        public Request AddWeight(int ClientID, int OrgaincWeight, int NonOrganicWeight, int ScheduleID, bool? IsSeparated)
+        {
+            Request requestofclient = _db.Request.Single(c => c.ClientId == ClientID && c.ScheduleId == ScheduleID);
+            requestofclient.OrgaincWeight = OrgaincWeight;
+            requestofclient.NonOrganicWeight = NonOrganicWeight;
+            requestofclient.IsSeparated = IsSeparated;
+            _db.SaveChanges();
+            return requestofclient;
+
+<<<<<<< HEAD
+
+=======
+        }
+        public object CollectorProfile(int ColectorID)
+        {
+            return _db.User.Where(c => c.Id == ColectorID).Select(c => new { c.UserName, c.PhoneNumber, c.Email });
+        }
+        #endregion
+>>>>>>> 881260d53f2014af9f9d51a2465d94fc74379062
     }
 }

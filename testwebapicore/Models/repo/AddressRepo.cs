@@ -14,7 +14,11 @@ namespace testwebapicore.Models.repo
         }
         public List<Address> GetAddressesByRegion(int regionId)
         {
-            return db.Address.Where(a => a.RegionId == regionId).ToList();
+            return db.Address.Where(a => a.RegionId == regionId).Select(a => new Address()
+            {
+                Id = a.Id,
+                StreetName = a.StreetName
+            }).ToList();
         }
         
         public List<string> streets(int RId)

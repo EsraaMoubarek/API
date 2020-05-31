@@ -14,9 +14,9 @@ namespace testwebapicore.Controllers
     [ApiController]
     public class CollectorController : ControllerBase
     {
-        CollectorRepo _db;
-
-        public CollectorController(CollectorRepo db)
+        //CollectorRepo _db;
+        UserRepo _db;
+        public CollectorController(UserRepo db)
         {
             _db = db;
         }
