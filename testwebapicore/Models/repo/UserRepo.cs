@@ -68,6 +68,7 @@ namespace testwebapicore.Models.repo
                 ClientBuildingNumber = a.BuildingNumber,
                 //ClientStreetName = a.Address.StreetName,
                 //ClientRegionName = a.Address.Region.Name,
+                NonOrganicWeight = a.NonOrganicWeight,
                 ClientStreetName = a.Address.StreetNameArabic,
                 ClientRegionName = a.Address.Region.NameArabic,
                 Date = a.Schedule.Time,
