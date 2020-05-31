@@ -10,6 +10,7 @@ using testwebapicore.Models.repo;
 namespace testwebapicore.Controllers
 {
     [Route("Region")]
+
     [ApiController]
     public class RegionController : ControllerBase
     {
@@ -18,6 +19,8 @@ namespace testwebapicore.Controllers
         {
             this.r = r;
         }
+        [Route("Regionsch")]
+
         public ActionResult getall()
         {
             

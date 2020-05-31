@@ -45,6 +45,14 @@ namespace testwebapicore
             services.AddScoped<Sch_col_Repo>();
             //services.AddScoped<RequestRepo>();
             services.AddScoped<ClientRepo>();
+<<<<<<< HEAD
+=======
+            services.AddScoped<WasteRepo>();
+
+
+
+
+>>>>>>> 43e5d692702a7de25999911253883d856519f471
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

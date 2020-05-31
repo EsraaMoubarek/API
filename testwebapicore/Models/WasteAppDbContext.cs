@@ -18,7 +18,6 @@ namespace testwebapicore.Models
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<Client> Client { get; set; }
         public virtual DbSet<ClientCategory> ClientCategory { get; set; }
-        public virtual DbSet<ClientPromotions> ClientPromotions { get; set; }
         public virtual DbSet<ComapnyPromotion> ComapnyPromotion { get; set; }
         public virtual DbSet<Dummytable> Dummytable { get; set; }
         public virtual DbSet<Feedback> Feedback { get; set; }
@@ -40,6 +39,10 @@ namespace testwebapicore.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+<<<<<<< HEAD
+=======
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+>>>>>>> 43e5d692702a7de25999911253883d856519f471
                 optionsBuilder.UseSqlServer("Server=.;Database= WasteAppDb;Trusted_Connection=True;");
             }
         }
@@ -119,6 +122,7 @@ namespace testwebapicore.Models
                     .IsUnicode(false);
             });
 
+<<<<<<< HEAD
             modelBuilder.Entity<ClientPromotions>(entity =>
             {
                 entity.HasIndex(e => new { e.ClientId, e.PromotionId })
@@ -138,6 +142,8 @@ namespace testwebapicore.Models
                     .HasConstraintName("FK_ClientPromotions_Promotions");
             });
 
+=======
+>>>>>>> 43e5d692702a7de25999911253883d856519f471
             modelBuilder.Entity<ComapnyPromotion>(entity =>
             {
                 entity.Property(e => e.Name)
@@ -415,7 +421,11 @@ namespace testwebapicore.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+<<<<<<< HEAD
                 entity.Property(e => e.Percent).HasColumnType("decimal(18, 0)");
+=======
+                entity.Property(e => e.Percent).HasColumnType("decimal(18, 2)");
+>>>>>>> 43e5d692702a7de25999911253883d856519f471
 
                 entity.Property(e => e.Price).HasColumnType("money");
             });
