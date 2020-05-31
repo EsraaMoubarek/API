@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using testwebapicore.Models;
 using testwebapicore.Models.repo;
 
 namespace testwebapicore.Controllers
@@ -34,5 +35,30 @@ namespace testwebapicore.Controllers
             return Ok(u.GetUsers().Where(a => a.Role.Role1 == "collector"));
 
         }
+        ///
+        [Route("adddriver")]
+        [HttpPost]
+        public ActionResult adddriver(User added)
+        {
+            added.Role.Role1 = "driver";
+
+            return Ok(u.addUser(added));
+
+           
+
+        }
+        ///
+        [Route("addcol")]
+        [HttpPost]
+        public ActionResult addcol(User added)
+        {
+            added.Role.Role1 = "collector";
+
+            return Ok(u.addUser(added));
+
+
+
+        }
+
     }
 }
