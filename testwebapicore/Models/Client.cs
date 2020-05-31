@@ -7,7 +7,6 @@ namespace testwebapicore.Models
     {
         public Client()
         {
-            ClientPromotions = new HashSet<ClientPromotions>();
             Feedback = new HashSet<Feedback>();
             PromotionCodes = new HashSet<PromotionCodes>();
             Request = new HashSet<Request>();
@@ -29,7 +28,6 @@ namespace testwebapicore.Models
 
         public virtual Address Address { get; set; }
         public virtual ClientCategory Category { get; set; }
-        public virtual ICollection<ClientPromotions> ClientPromotions { get; set; }
         public virtual ICollection<Feedback> Feedback { get; set; }
         public virtual ICollection<PromotionCodes> PromotionCodes { get; set; }
         public virtual ICollection<Request> Request { get; set; }

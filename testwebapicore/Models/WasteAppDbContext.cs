@@ -18,7 +18,6 @@ namespace testwebapicore.Models
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<Client> Client { get; set; }
         public virtual DbSet<ClientCategory> ClientCategory { get; set; }
-        public virtual DbSet<ClientPromotions> ClientPromotions { get; set; }
         public virtual DbSet<ComapnyPromotion> ComapnyPromotion { get; set; }
         public virtual DbSet<Feedback> Feedback { get; set; }
         public virtual DbSet<FeedbackCategory> FeedbackCategory { get; set; }
@@ -119,29 +118,6 @@ namespace testwebapicore.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<ClientPromotions>(entity =>
-            {
-                entity.HasIndex(e => new { e.ClientId, e.PromotionId })
-                    .HasName("FK");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.ClientId).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.Date).HasColumnType("date");
-
-                entity.HasOne(d => d.Client)
-                    .WithMany(p => p.ClientPromotions)
-                    .HasForeignKey(d => d.ClientId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ClientPromotions_Client");
-
-                entity.HasOne(d => d.Promotion)
-                    .WithMany(p => p.ClientPromotions)
-                    .HasForeignKey(d => d.PromotionId)
-                    .HasConstraintName("FK_ClientPromotions_Promotions");
-            });
-
             modelBuilder.Entity<ComapnyPromotion>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -194,6 +170,8 @@ namespace testwebapicore.Models
                 entity.Property(e => e.Code)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.TakeDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.PromotionCodes)
