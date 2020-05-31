@@ -8,6 +8,7 @@ namespace testwebapicore.Models
         public int? ClientId { get; set; }
         public int PromtionId { get; set; }
         public string Code { get; set; }
+        public DateTime? TakeDate { get; set; }
 
         public virtual Client Client { get; set; }
         public virtual Promotions Promtion { get; set; }

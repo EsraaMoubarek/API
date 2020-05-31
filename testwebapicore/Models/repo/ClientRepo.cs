@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace testwebapicore.Models.repo
@@ -97,7 +98,7 @@ namespace testwebapicore.Models.repo
                     StreetName = x.Address.StreetName
                 }
             })
-                 .Where(x => x.Id == id).FirstOrDefault(); ;
+                 .Where(x => x.Id == id).FirstOrDefault();
             return client;
         }
 
@@ -169,6 +170,104 @@ namespace testwebapicore.Models.repo
             _db.Request.Remove(request);
             _db.SaveChanges();
             return request;
+        }
+        ///******** Promotion Part ********/// 
+        public List<Promotions> getPromotions()
+        {
+            List<Promotions> promotions = new List<Promotions>();
+            Promotions validPromotion = new Promotions();
+
+            var availblePromotions = _db.PromotionCodes.Where(x => x.ClientId == null)
+                .Select(x=>x.PromtionId).ToList();
+
+            var t = availblePromotions.Distinct();
+
+            foreach (var promotion in t) {
+                validPromotion = _db.Promotions.Select(x => new Promotions()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    RequiredPoints = x.RequiredPoints,
+                    DateFrom = x.DateFrom,
+                    DateTo = x.DateTo,
+                    Company = new ComapnyPromotion() { 
+                        Id = x.Company.Id,
+                        Name = x.Company.Name
+                    }
+                })
+                 .Where(x => x.Id == promotion).FirstOrDefault();
+                if (validPromotion.DateTo >= DateTime.Now)
+                {
+                    promotions.Add(validPromotion);
+                }
+            }
+           // var promotions = _db.Promotions.Where(x => x.DateTo >= DateTime.Now ).ToList(); 
+            return promotions;
+        }
+
+        public bool AddClientPromotion(PromotionCodes clientPromotion) {
+            try
+            {
+                var client = _db.Client
+                       .Find(clientPromotion.ClientId);
+
+                var promoRequiredPoints = _db.Promotions
+                    .Where(x => x.Id == clientPromotion.PromtionId)
+                    .Select(x => x.RequiredPoints);
+
+                // can cause null reference exception ** modification needed
+                if (client.TotalPoints >= promoRequiredPoints.FirstOrDefault())
+                {
+
+                    var promotionCode = _db.PromotionCodes
+                        .Where(x => x.PromtionId == clientPromotion.PromtionId
+                        && x.ClientId == null).FirstOrDefault();
+
+                    promotionCode.ClientId = clientPromotion.ClientId;
+                    promotionCode.TakeDate = DateTime.Now;
+                  //  _db.ClientPromotions.Add(clientPromotion);
+
+                    ///
+                    client.TotalPoints = client.TotalPoints - promoRequiredPoints.FirstOrDefault();
+
+                    _db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (NullReferenceException) {
+                return false;
+            }
+        }
+
+        public List<PromotionCodes> GetMyPromotions(int clientId) {
+
+            List<PromotionCodes> clientPromotions = _db.PromotionCodes
+                .Where(x => x.ClientId == clientId)
+                .Select(x => new PromotionCodes()
+                {
+                    ClientId = x.ClientId,
+                    PromtionId = x.PromtionId,
+                    Code = x.Code,
+                    TakeDate = x.TakeDate,
+                    Promtion = new Promotions() {
+                        Name = x.Promtion.Name,
+                        RequiredPoints = x.Promtion.RequiredPoints,
+                        DateFrom = x.Promtion.DateFrom,
+                        DateTo = x.Promtion.DateTo,
+                        Details = x.Promtion.Details,
+                        Company = new ComapnyPromotion() {
+                            Name = x.Promtion.Company.Name
+                        }
+                    }
+                })
+                .ToList();
+
+           return clientPromotions;
+
         }
     }
 }
