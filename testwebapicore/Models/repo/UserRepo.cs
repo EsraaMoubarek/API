@@ -100,6 +100,10 @@ namespace testwebapicore.Models.repo
             return _db.User.Where(c => c.Id == ColectorID).Select(c => new { c.UserName, c.PhoneNumber, c.Email });
         }
         #endregion
+        public User getById(int id)
+        {
+            return _db.User.Where(a => a.Id == id).Select(b => new User { UserName = b.UserName }).First();
+        }
 
         public User getById(int id)
         {
