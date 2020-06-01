@@ -41,5 +41,21 @@ namespace testwebapicore.Models.repo
             //return Addr;
 
         }
+
+        //return complete Address object
+        public Address getById(int id)
+        {
+            return db.Address.Where(l => l.Id == id).Select(a => new Address { Id = a.Id, RegionId = a.RegionId, StreetName = a.StreetName, StreetNameArabic = a.StreetNameArabic, Latitude = a.Latitude, Longitude = a.Longitude }).First();
+        }
+        //return Object
+        public object getObjectById(int id, int buildNo, object reg)
+        {
+            return db.Address.Where(l => l.Id == id).Select(b => new { AddressId = b.Id, StreetNameArabic = b.StreetNameArabic, Latitude = b.Latitude, Longitude = b.Longitude, BuildingNo = buildNo, RegionInfo = reg }).First();
+        }
+        //return coordinates
+        public Address getByRegionId(int id)
+        {
+            return db.Address.Where(a => a.RegionId == id).Select(b => new Address { Latitude = b.Latitude, Longitude = b.Longitude }).First();
+        }
     }
 }

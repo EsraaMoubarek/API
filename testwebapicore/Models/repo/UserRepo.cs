@@ -22,7 +22,7 @@ namespace testwebapicore.Models.repo
             _db.SaveChanges();
             return u;
         }
-       
+
 
 
         /////////
@@ -66,12 +66,11 @@ namespace testwebapicore.Models.repo
                 ClientLastName = a.Client.LastName,
                 ClientApartmentNumber = a.ApartmentNumber,
                 ClientBuildingNumber = a.BuildingNumber,
-                //ClientStreetName = a.Address.StreetName,
-                //ClientRegionName = a.Address.Region.Name,
                 ClientStreetName = a.Address.StreetNameArabic,
                 ClientRegionName = a.Address.Region.NameArabic,
                 Date = a.Schedule.Time,
                 ScheduleID = a.Schedule.Id,//to add weight
+                NonOrganicWeight = a.NonOrganicWeight
             });
 
             foreach (var client in Clients)

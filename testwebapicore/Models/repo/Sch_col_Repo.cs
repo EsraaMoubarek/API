@@ -34,5 +34,11 @@ namespace testwebapicore.Models.repo
             db.SaveChanges();
             return (res.FirstOrDefault());
         }
+
+        //return list of ScheduleCollector objects for specific scedule 
+        public List<ScheduleCollector> getByScheduleId(int id)
+        {
+            return db.ScheduleCollector.Where(s => s.ScheduleId == id).Select(a => new ScheduleCollector { ScheduleId = a.ScheduleId, CollectorId = a.CollectorId }).ToList();
+        }
     }
 }
