@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -335,5 +336,41 @@ namespace testwebapicore.Models.repo
 
             _db.SaveChanges();
         }
+        public List<object> ClientsInRegion()
+        {
+            List<Region> rgns = _db.Region.Select(a => new Region { Id = a.Id, Name = a.Name }).ToList();
+            int tot = _db.Client.Count();
+            List<object> bigArray = new List<object>();
+            // object temp=[]
+            foreach (var item in rgns)
+            {
+                ArrayList arrayList = new ArrayList();
+                float per0 = _db.Client.Count(t => t.Address.Region.Id == item.Id) / (float)tot;
+                arrayList.Add(item.Name);
+                arrayList.Add(per0);
+                bigArray.Add(arrayList);
+            }
+            return bigArray;
+        }
+        public List<object> TypeOfClientsInRegion()
+        {
+            List<Region> rgns = _db.Region.Select(a => new Region { Id = a.Id, Name = a.Name }).ToList();
+            // int tot = _db.Client.Count();
+            List<object> bigArray = new List<object>();
+            // object temp=[]
+            foreach (var item in rgns)
+            {
+                ArrayList arrayList = new ArrayList();
+                float perAPrtmnt = _db.Client.Count(t => t.Address.Region.Id == item.Id && t.CategoryId == 1);// / (float)tot;
+                float perRestrnt = _db.Client.Count(t => t.Address.Region.Id == item.Id && t.CategoryId == 2);// / (float)tot;
+                arrayList.Add(item.Name);
+                arrayList.Add(perAPrtmnt);
+                arrayList.Add(perRestrnt);
+
+                bigArray.Add(arrayList);
+            }
+            return bigArray;
+        }
+
     }
 }

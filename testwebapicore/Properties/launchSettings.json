@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "home",
+      "launchUrl": "api/driver",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "testwebapicore": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "home",
+      "launchUrl": "collector",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

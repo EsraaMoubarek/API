@@ -16,5 +16,7 @@ namespace testwebapicore.Models
         public string ClientStreetName { get; set; }
         public string ClientRegionName { get; set; }
         public DateTime Date { get; set; }
+        public int? NonOrganicWeight { get; set; }
+        public string ClientPhoneNumber { get; set; }
     }
 }

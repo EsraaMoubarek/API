@@ -14,9 +14,9 @@ namespace testwebapicore.Controllers
     [ApiController]
     public class CollectorController : ControllerBase
     {
-        CollectorRepo _db;
-
-        public CollectorController(CollectorRepo db)
+        
+        UserRepo _db;
+        public CollectorController(UserRepo db)
         {
             _db = db;
         }
@@ -44,12 +44,12 @@ namespace testwebapicore.Controllers
         //    return new string[] { "tessssst", "Jane Doe" };
 
         //}
-        [Authorize, HttpGet, Route("weight")]
+        [/*Authorize,*/ HttpGet, Route("weight")]
         public ActionResult AddWeight(int ClientID, int OrgaincWeight, int NonOrganicWeight, int ScheduleID, bool? IsSeparated)
         {
-            Request req =
+            int reqId =
           _db.AddWeight(ClientID, OrgaincWeight, NonOrganicWeight, ScheduleID, IsSeparated);
-            return Ok(req);
+            return Ok(reqId);
         }
         [ HttpGet, Route("profile")]
         public ActionResult CollectorProfile(int CollectorID)
