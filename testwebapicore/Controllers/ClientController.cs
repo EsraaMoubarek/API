@@ -180,5 +180,6 @@ namespace testwebapicore.Controllers
 
             return Ok(_db.GetMyPromotions(id));
         }
+
     }
 }
