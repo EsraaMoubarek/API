@@ -176,9 +176,30 @@ namespace testwebapicore.Controllers
         [HttpGet]
         [Route("{id}")]
         public ActionResult GetMyPromotions(int id) {
-
-
             return Ok(_db.GetMyPromotions(id));
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public ActionResult getClientPoints(int id) {
+            return Ok(_db.getClientPoints(id));
+        }
+        ///******** Profile ********/// 
+
+        [HttpGet]
+        [Route("{id}")]
+        public ActionResult getClientData(int id) {
+            return Ok(_db.getClientData(id));
+        }
+
+        [HttpGet]
+        public ActionResult GetClientCategories() {
+            return Ok(_db.GetClientCategories());
+        }
+        [HttpPut]
+        public ActionResult UpdateClient(Client client) {
+            _db.UpdateClient(client);
+            return Ok();
         }
 
     }
