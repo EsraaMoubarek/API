@@ -70,7 +70,8 @@ namespace testwebapicore.Models.repo
                 ClientRegionName = a.Address.Region.NameArabic,
                 Date = a.Schedule.Time,
                 ScheduleID = a.Schedule.Id,//to add weight
-                NonOrganicWeight = a.NonOrganicWeight
+                NonOrganicWeight = a.NonOrganicWeight,
+                ClientPhoneNumber = a.Client.Mobile //addedNew
             });
 
             foreach (var client in Clients)
@@ -84,14 +85,14 @@ namespace testwebapicore.Models.repo
             return clientLists;
         }
 
-        public Request AddWeight(int ClientID, int OrgaincWeight, int NonOrganicWeight, int ScheduleID, bool? IsSeparated)
+        public int AddWeight(int ClientID, int OrgaincWeight, int NonOrganicWeight, int ScheduleID, bool? IsSeparated)
         {
-            Request requestofclient = _db.Request.Single(c => c.ClientId == ClientID && c.ScheduleId == ScheduleID);
+            Request requestofclient = _db.Request.SingleOrDefault(c => c.ClientId == ClientID && c.ScheduleId == ScheduleID);
             requestofclient.OrgaincWeight = OrgaincWeight;
             requestofclient.NonOrganicWeight = NonOrganicWeight;
             requestofclient.IsSeparated = IsSeparated;
             _db.SaveChanges();
-            return requestofclient;
+            return requestofclient.Id;
 
 
         }
@@ -105,5 +106,6 @@ namespace testwebapicore.Models.repo
             return _db.User.Where(a => a.Id == id).Select(b => new User { UserName = b.UserName }).First();
         }
 
+        
     }
 }

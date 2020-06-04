@@ -133,7 +133,7 @@ namespace testwebapicore.Models.repo
                 Time = x.Time,
                 DriverId = x.DriverId,
                 RegionId = x.RegionId
-            }).Where(a => a.RegionId == id).ToList();
+            }).Where(a => a.RegionId == id && a.Time >= DateTime.Now).ToList();
             return schedules;
         }
         public void AddNewRequest(Request request)
@@ -191,6 +191,7 @@ namespace testwebapicore.Models.repo
                     RequiredPoints = x.RequiredPoints,
                     DateFrom = x.DateFrom,
                     DateTo = x.DateTo,
+                    Details = x.Details,
                     Company = new ComapnyPromotion() { 
                         Id = x.Company.Id,
                         Name = x.Company.Name
@@ -269,6 +270,71 @@ namespace testwebapicore.Models.repo
 
            return clientPromotions;
 
+        }
+        public int getClientPoints(int id) {
+            var points = _db.Client.Where(x => x.Id == id).Select(x => x.TotalPoints).FirstOrDefault();
+            if (points != null)
+            {
+                return (int)points;
+            }
+            else{
+                return 0;
+            }
+            
+        }
+
+
+        ///******** Profile ********/// 
+
+        public Client getClientData(int id) {
+
+            return _db.Client.Where(x=>x.Id == id)
+                .Select(x=>new Client()
+                {
+                    Id = x.Id,
+                    ClientName = x.ClientName,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Mobile = x.Mobile,
+                    Email = x.Email,
+                    BuildingNumber = x.BuildingNumber,
+                    ApartmentNumber = x.ApartmentNumber,
+                    AddressId= x.AddressId,
+                    CategoryId = x.CategoryId,
+                    Category = new ClientCategory(){
+                        Id = x.Category.Id,
+                        Name = x.Category.Name
+                    },
+                    Address = new Address() { 
+                        Id = x.Address.Id,
+                        StreetName = x.Address.StreetName,
+                        RegionId=x.Address.RegionId,
+                        Region = new Region() {
+                            Id = x.Address.Region.Id,
+                            Name = x.Address.Region.Name
+                        }
+                    }
+                }).FirstOrDefault();
+        }
+        public List<ClientCategory> GetClientCategories() {
+
+            return _db.ClientCategory.Select(x=>new ClientCategory() { 
+                Id = x.Id,
+                Name = x.Name
+            }).ToList();
+        }
+
+        public void UpdateClient(Client client) {
+            var clientUpdated = _db.Client.SingleOrDefault(x => x.Id == client.Id);
+            clientUpdated.FirstName = client.FirstName;
+            clientUpdated.LastName = client.LastName;
+            //clientUpdated.Mobile = client.Mobile;
+            clientUpdated.BuildingNumber = client.BuildingNumber;
+            clientUpdated.ApartmentNumber = client.ApartmentNumber;
+            clientUpdated.AddressId = client.AddressId;
+            clientUpdated.CategoryId = client.CategoryId;
+
+            _db.SaveChanges();
         }
         public List<object> ClientsInRegion()
         {
