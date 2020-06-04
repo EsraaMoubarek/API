@@ -15,7 +15,21 @@ namespace testwebapicore.Models.repo
         }
         public List<Schedule> GetSchedules()
         {
-            return db.Schedule.ToList();
+            return db.Schedule.Select(s => new Schedule() 
+            {
+                Id = s.Id,
+                Time = s.Time,
+                Driver = new User()
+                {
+                    Id = (int)s.DriverId,
+                    UserName = s.Driver.UserName
+                },
+                Region = new Region()
+                {
+                    Id = (int)s.RegionId,
+                    Name = s.Region.Name
+                }
+            }).ToList();
         }
         public Schedule AddSchedule(Schedule s)
         {
