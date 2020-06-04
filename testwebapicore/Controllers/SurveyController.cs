@@ -11,5 +11,6 @@ namespace testwebapicore.Controllers
     [ApiController]
     public class SurveyController : ControllerBase
     {
+
     }
 }

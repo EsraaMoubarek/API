@@ -47,6 +47,7 @@ namespace testwebapicore
             services.AddScoped<ClientRepo>();
             services.AddScoped<AddressRepo>();
             services.AddScoped<WasteRepo>();
+            services.AddScoped<SurveyRepo>();
 
 
 
