@@ -47,6 +47,10 @@ namespace testwebapicore
             services.AddScoped<ClientRepo>();
             services.AddScoped<AddressRepo>();
             services.AddScoped<WasteRepo>();
+            services.AddScoped<comp_prom_repo>();
+            services.AddScoped<Promotions_repo>();
+
+
 
 
 
