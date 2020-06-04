@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using testwebapicore.Models;
 using testwebapicore.Models.repo;
+using System.IO;
+
 
 namespace testwebapicore.Controllers
 {
@@ -18,13 +20,19 @@ namespace testwebapicore.Controllers
         RegionRepo regdb;
         AddressRepo addb;
         UserRepo u;
-        public AdminController(SchedulRepo schdb, Sch_col_Repo scoldb, RegionRepo regdb, UserRepo u, AddressRepo addb)
+        comp_prom_repo comp;
+        Promotions_repo prom;
+       
+        
+        public AdminController(  SchedulRepo schdb, Sch_col_Repo scoldb, RegionRepo regdb, UserRepo u, AddressRepo addb, comp_prom_repo _comp, Promotions_repo _prom)
         {
             this.schdb = schdb;
             this.scoldb = scoldb;
             this.regdb = regdb;
             this.u = u;
             this.addb = addb;
+            this.comp = _comp;
+            this.prom = _prom;
         }
 
         
@@ -68,6 +76,37 @@ namespace testwebapicore.Controllers
             return Ok(u.addUser(added));
 
         }
+        //Esraa
+        [Route("addcomp")]
+        [HttpPost]
+        public ActionResult addcomp(ComapnyPromotion cp)
+        {
+             //= new ComapnyPromotion();
+            //cp.Name = ncp.Name;
+            //IFormFile pic = ncp.Logo;
+
+            //using (MemoryStream ms = new MemoryStream())
+            //{
+            //    pic.CopyTo(ms);
+            //    cp.Logo = ms.ToArray();
+            //}
+
+
+            return Ok(comp.addcomp(cp));
+
+        }
+        [Route("addprom")]
+        [HttpPost]
+        public ActionResult addpromotion(Promotions p)
+        {
+           
+
+
+            return Ok(prom.addprom(p));
+
+        }
+
+        ///
 
         [HttpGet("api/admin/getAdminSchedule")]
         public ActionResult getAdminSchedule()
