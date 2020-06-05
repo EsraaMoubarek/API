@@ -49,6 +49,9 @@ namespace testwebapicore
             services.AddScoped<WasteRepo>();
             services.AddScoped<comp_prom_repo>();
             services.AddScoped<Promotions_repo>();
+            services.AddScoped<promcodes_repo>();
+
+
 
 
 
