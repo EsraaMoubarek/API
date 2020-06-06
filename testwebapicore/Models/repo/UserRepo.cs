@@ -22,7 +22,7 @@ namespace testwebapicore.Models.repo
             _db.SaveChanges();
             return u;
         }
-
+        
 
 
         /////////
@@ -106,5 +106,6 @@ namespace testwebapicore.Models.repo
             return _db.User.Where(a => a.Id == id).Select(b => new User { UserName = b.UserName }).First();
         }
 
+        
     }
 }
