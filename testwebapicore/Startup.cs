@@ -50,7 +50,8 @@ namespace testwebapicore
             services.AddScoped<comp_prom_repo>();
             services.AddScoped<Promotions_repo>();
             services.AddScoped<promcodes_repo>();
-
+            services.AddScoped<FeedbackRepo>();
+            services.AddScoped<FeedbackCategoryRepo>();
 
 
 
