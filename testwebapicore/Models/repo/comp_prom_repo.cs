@@ -8,6 +8,7 @@ using System.IO;
 
 namespace testwebapicore.Models.repo
 {
+    //esraa
     public class comp_prom_repo
     {
         WasteAppDbContext _db;
@@ -24,6 +25,15 @@ namespace testwebapicore.Models.repo
             return cp;
 
         }
+        public List<ComapnyPromotion> GetAllCompany()
+        {
+            return _db.ComapnyPromotion.Select(a => new ComapnyPromotion()
+            {
+                Id = a.Id,
+                Name = a.Name
+            }).ToList();
+        }
+
 
     }
 }

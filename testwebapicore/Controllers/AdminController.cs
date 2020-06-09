@@ -22,9 +22,10 @@ namespace testwebapicore.Controllers
         UserRepo u;
         comp_prom_repo comp;
         Promotions_repo prom;
+        promcodes_repo code;
        
         
-        public AdminController(  SchedulRepo schdb, Sch_col_Repo scoldb, RegionRepo regdb, UserRepo u, AddressRepo addb, comp_prom_repo _comp, Promotions_repo _prom)
+        public AdminController(SchedulRepo schdb, Sch_col_Repo scoldb, RegionRepo regdb, UserRepo u, AddressRepo addb, comp_prom_repo _comp, Promotions_repo _prom,promcodes_repo _code)
         {
             this.schdb = schdb;
             this.scoldb = scoldb;
@@ -33,6 +34,7 @@ namespace testwebapicore.Controllers
             this.addb = addb;
             this.comp = _comp;
             this.prom = _prom;
+            this.code = _code;
         }
 
         
@@ -103,6 +105,26 @@ namespace testwebapicore.Controllers
 
 
             return Ok(prom.addprom(p));
+
+        }
+        [Route("getcomp")]
+        [HttpGet]
+        public ActionResult getcomp()
+        {
+
+
+
+            return Ok(comp.GetAllCompany());
+
+        }
+        [Route("addcode")]
+        [HttpPost]
+        public ActionResult addcode(PromotionCodes pc)
+        {
+
+
+
+            return Ok(code.addpromcode(pc));
 
         }
 

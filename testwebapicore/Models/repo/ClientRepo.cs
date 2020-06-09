@@ -47,7 +47,8 @@ namespace testwebapicore.Models.repo
         public List<Request> RequestsList(int id)
         {
 
-            return _db.Request.Where(x => x.ClientId == id).Select(x => new Request()
+            return _db.Request.Where(x => x.ClientId == id && x.IsSeparated !=null 
+            && (x.OrgaincWeight > 0 || x.NonOrganicWeight >0)).Select(x => new Request()
             {
                 Id = x.Id,
                 ApartmentNumber = x.ApartmentNumber,
@@ -64,7 +65,19 @@ namespace testwebapicore.Models.repo
                 Schedule = new Schedule()
                 {
                     Time = x.Schedule.Time
+                },
+                Address = new Address() {
+                    StreetName = x.Address.StreetName
+                    , Region = new Region() { 
+                        Id = x.Address.Region.Id,
+                        Name = x.Address.Region.Name
+                    }
                 }
+               , Collector = new User()
+               {
+                   Id = x.Collector.Id,
+                   UserName = x.Collector.UserName
+               }
             }).ToList();
         }
         ///
