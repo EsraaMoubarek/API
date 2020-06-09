@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using testwebapicore.HubConfig;
 using testwebapicore.Models;
 using testwebapicore.Models.repo;
 
@@ -18,9 +19,11 @@ namespace testwebapicore.Controllers
     public class AuthController : ControllerBase
     {
         UserRepo _db;
-        public AuthController(UserRepo db)
+        ClientRepo _clientRepo;
+        public AuthController(UserRepo db, ClientRepo clientRepo)
         {
             _db = db;
+            _clientRepo = clientRepo;
         }
 
 
@@ -68,8 +71,11 @@ namespace testwebapicore.Controllers
 
             else
             {
+                ChartHub _connectedHub = new ChartHub();
+                var ConnectionID = _connectedHub.GetConnectionID();
                 string rolename = client.Category.Name;
                 int UserId = client.Id;
+                _clientRepo.AddClientConnection(client.Id, ConnectionID);
                 var claims = new[]
            {    new Claim("UserId",UserId.ToString()),
                 new Claim("role",rolename),

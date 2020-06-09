@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
+
 namespace testwebapicore.Models.repo
 {
     public class ClientRepo
@@ -13,6 +14,7 @@ namespace testwebapicore.Models.repo
         public ClientRepo(WasteAppDbContext db)
         {
             this._db = db;
+            
         }
         public void RegisterApartment(Client client)
         {
@@ -384,6 +386,30 @@ namespace testwebapicore.Models.repo
             }
             return bigArray;
         }
+
+        public ClientConnection AddClientConnection(int ClientID, string ConnectionID)
+        {
+            ClientConnection con;
+            ClientConnection existingcon = _db.ClientConnection.Single(a => a.ClientId == ClientID);
+            if (existingcon != null)
+            {
+                existingcon.ConnectoinId = ConnectionID;
+                return existingcon;
+
+            }
+            else
+            {
+                con = new ClientConnection();
+
+                con.ClientId = ClientID;
+                con.ConnectoinId = ConnectionID;
+                _db.ClientConnection.Add(con);
+            }
+            _db.SaveChanges();
+            return con;
+        }
+
+       
 
     }
 }
