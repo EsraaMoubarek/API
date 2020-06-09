@@ -39,10 +39,14 @@ namespace testwebapicore.Controllers
         [HttpDelete("{id}")]
         public ActionResult del([FromRoute]int id)
         {
-
-            
             return Ok(s.deleteSchedule(id));
-          
+        }
+
+        //[HttpGet]
+        [Route("monthlyschedulebyregion")]
+        public IActionResult GetMonthlySchedule(int regionId)
+        {
+            return Ok(s.MonthlyScheduleByRegion(regionId));
         }
 
 

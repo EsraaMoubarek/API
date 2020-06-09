@@ -118,5 +118,6 @@ namespace testwebapicore.Models.repo
         {
             return _db.Request.Where(x => x.ScheduleId == schId).Select(a => new { BuildingNumber = (int)a.BuildingNumber, AddressId = (int)a.AddressId, }).ToList<object>();
         }
+
     }
 }

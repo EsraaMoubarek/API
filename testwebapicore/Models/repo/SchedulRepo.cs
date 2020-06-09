@@ -59,5 +59,24 @@ namespace testwebapicore.Models.repo
 
             return db.Schedule.Where(a => a.Time.Date == today.Date).Select(a => new Schedule { Id = a.Id, Time = a.Time, DriverId = a.DriverId, RegionId = a.RegionId }).ToList();
         }
+        public List<Schedule> MonthlyScheduleByRegion(int regionId)
+        {
+            //returns client requests maximaly including past month not before that
+            return db.Schedule.Where(s => (s.Time.Month <= DateTime.Now.Month || s.Time >= DateTime.Now) && s.RegionId == regionId).Select(s => new Schedule()
+            {
+                Id = s.Id,
+                Time = s.Time,
+                Driver = new User()
+                {
+                    Id = (int)s.DriverId,
+                    UserName = s.Driver.UserName
+                },
+                Region = new Region()
+                {
+                    Id = (int)s.RegionId,
+                    Name = s.Region.Name
+                }
+            }).ToList();
+        }
     }
 }
