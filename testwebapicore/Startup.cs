@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using testwebapicore.Models;
 using testwebapicore.Models.repo;
+using testwebapicore.HubConfig;
 
 namespace testwebapicore
 {
@@ -52,7 +53,11 @@ namespace testwebapicore
             services.AddScoped<promcodes_repo>();
             services.AddScoped<FeedbackRepo>();
             services.AddScoped<FeedbackCategoryRepo>();
+<<<<<<< HEAD
             services.AddScoped<SurveyRepo>();
+=======
+            services.AddSignalR();
+>>>>>>> 23a16513c6c0a7a6d7882a8868184c56aaa8f6a4
 
 
 
@@ -82,6 +87,7 @@ namespace testwebapicore
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChartHub>("/charthub");
             });
         }
     }
