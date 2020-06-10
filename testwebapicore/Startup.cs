@@ -53,11 +53,6 @@ namespace testwebapicore
             services.AddScoped<promcodes_repo>();
             services.AddScoped<FeedbackRepo>();
             services.AddScoped<FeedbackCategoryRepo>();
-<<<<<<< HEAD
-            services.AddScoped<SurveyRepo>();
-=======
-            services.AddSignalR();
->>>>>>> 23a16513c6c0a7a6d7882a8868184c56aaa8f6a4
 
 
 
