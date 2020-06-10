@@ -18,10 +18,19 @@ namespace testwebapicore.Controllers
         {
             _surveyRepo = surveyRepo;   
         }
-        public void PostAddSurvey(Survey survey)
+        [HttpGet]
+        public void Getsurvey()
         {
-            _surveyRepo.AddSurvey(survey);
-
+          //Survey survey=  _surveyRepo.AddSurvey();
+          //  return survey;
+      // return Ok(survey);
+        }
+        [HttpPost]
+        public void PostAddSurvey(List<SurveyQuestions> sq)
+        {
+            _surveyRepo.AddSurvey();
+            _surveyRepo.AddSurveyQuestions(sq);
+           // return Ok(sq);
         } 
     }
 }

@@ -12,20 +12,27 @@ namespace testwebapicore.Models.repo
         {
             this._db = db;
         }
-        public void AddSurvey(Survey survey)
+        public void AddSurvey()
         {
+            Survey survey = new Survey();
             survey.GenerationDate = DateTime.Today;
             _db.Survey.Add(survey);
             _db.SaveChanges();
+           // return survey;
         }
         public void AddSurveyQuestions(List<SurveyQuestions> survey)
         {
-          Survey s=  _db.Survey.SingleOrDefault(a => a.GenerationDate == DateTime.Today);
+            DateTime d = DateTime.Today;
+          List<int> s=  _db.Survey.Where(a => a.GenerationDate == d).Select(b => b.Id).ToList();
             foreach (var item in survey)
             {
-                item.SurveyId = s.Id;
+                item.SurveyId = s[0];
             }
-            _db.SurveyQuestions.AddRange(survey);
+            foreach (var item in survey)
+            {
+                _db.SurveyQuestions.Add(item);
+            }
+           // _db.SurveyQuestions.AddRange(survey);
             _db.SaveChanges();
         }
     }
