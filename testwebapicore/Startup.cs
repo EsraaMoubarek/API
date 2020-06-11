@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using testwebapicore.Models;
 using testwebapicore.Models.repo;
 using testwebapicore.HubConfig;
+using Hangfire;
+using Hangfire.MemoryStorage;
 
 namespace testwebapicore
 {
@@ -53,16 +55,24 @@ namespace testwebapicore
             services.AddScoped<promcodes_repo>();
             services.AddScoped<FeedbackRepo>();
             services.AddScoped<FeedbackCategoryRepo>();
+            services.AddScoped<SurveyRepo>();
+            services.AddSignalR();
 
+            services.AddHangfire(config =>
+                config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseDefaultTypeSerializer()
+                .UseMemoryStorage());
 
-
+            services.AddHangfireServer();
 
 
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient,
+            IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
         {
             //if (env.IsDevelopment())
             {
@@ -84,6 +94,15 @@ namespace testwebapicore
                 endpoints.MapControllers();
                 endpoints.MapHub<ChartHub>("/charthub");
             });
+
+            app.UseHangfireDashboard();
+            //backgroundJobClient.Enqueue(() => Console.WriteLine("Hello Hanfire job!"));
+            recurringJobManager.AddOrUpdate(
+                "Run every minute",
+                () => serviceProvider.GetService<RequestRepo>().AssignRequestsToCollectors(),
+                "0 9 * * *"
+            );
+
         }
     }
 }
