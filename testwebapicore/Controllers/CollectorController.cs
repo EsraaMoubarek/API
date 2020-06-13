@@ -49,6 +49,8 @@ namespace testwebapicore.Controllers
         {
             int reqId =
           _db.AddWeight(ClientID, OrgaincWeight, NonOrganicWeight, ScheduleID, IsSeparated);
+            int reqID = reqId;
+            _db.AddPoints(ClientID, NonOrganicWeight, reqId);
             return Ok(reqId);
         }
         [ HttpGet, Route("profile")]
