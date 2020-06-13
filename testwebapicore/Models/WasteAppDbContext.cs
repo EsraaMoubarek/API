@@ -69,12 +69,9 @@ namespace testwebapicore.Models
 
             modelBuilder.Entity<Client>(entity =>
             {
-
                 entity.HasIndex(e => e.Mobile)
                     .HasName("FK")
                     .IsUnique();
-                entity.HasIndex(e => new { e.AddressId, e.CategoryId })
-                    .HasName("FK");
 
                 entity.Property(e => e.ClientName)
                     .IsRequired()
@@ -114,6 +111,7 @@ namespace testwebapicore.Models
                     .HasForeignKey(d => d.CategoryId)
                     .HasConstraintName("FK_Client_ClientCategory");
             });
+
 
             modelBuilder.Entity<ClientCategory>(entity =>
             {
