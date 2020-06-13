@@ -18,6 +18,7 @@ namespace testwebapicore.Models
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<Client> Client { get; set; }
         public virtual DbSet<ClientCategory> ClientCategory { get; set; }
+        public virtual DbSet<ClientConnection> ClientConnection { get; set; }
         public virtual DbSet<ComapnyPromotion> ComapnyPromotion { get; set; }
         public virtual DbSet<Feedback> Feedback { get; set; }
         public virtual DbSet<FeedbackCategory> FeedbackCategory { get; set; }
@@ -39,6 +40,7 @@ namespace testwebapicore.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=.;Database= WasteAppDb;Trusted_Connection=True;");
             }
         }
@@ -115,6 +117,19 @@ namespace testwebapicore.Models
             {
                 entity.Property(e => e.Name)
                     .HasMaxLength(30)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ClientConnection>(entity =>
+            {
+                entity.HasKey(e => e.ClientId);
+
+                entity.Property(e => e.ClientId)
+                    .HasColumnName("ClientID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.ConnectionId)
+                    .HasColumnName("ConnectionID")
                     .IsUnicode(false);
             });
 
