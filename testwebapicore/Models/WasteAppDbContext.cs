@@ -22,7 +22,6 @@ namespace testwebapicore.Models
         public virtual DbSet<ComapnyPromotion> ComapnyPromotion { get; set; }
         public virtual DbSet<Feedback> Feedback { get; set; }
         public virtual DbSet<FeedbackCategory> FeedbackCategory { get; set; }
-        public virtual DbSet<Instructions> Instructions { get; set; }
         public virtual DbSet<PromotionCodes> PromotionCodes { get; set; }
         public virtual DbSet<Promotions> Promotions { get; set; }
         public virtual DbSet<Region> Region { get; set; }
@@ -70,8 +69,9 @@ namespace testwebapicore.Models
 
             modelBuilder.Entity<Client>(entity =>
             {
-                entity.HasIndex(e => new { e.AddressId, e.CategoryId })
-                    .HasName("FK");
+                entity.HasIndex(e => e.Mobile)
+                    .HasName("FK")
+                    .IsUnique();
 
                 entity.Property(e => e.ClientName)
                     .IsRequired()
@@ -83,7 +83,6 @@ namespace testwebapicore.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.FirstName)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -98,7 +97,7 @@ namespace testwebapicore.Models
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Address)
@@ -128,8 +127,8 @@ namespace testwebapicore.Models
                     .HasColumnName("ClientID")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.ConnectionId)
-                    .HasColumnName("ConnectionID")
+                entity.Property(e => e.ConnectoinId)
+                    .HasColumnName("ConnectoinID")
                     .IsUnicode(false);
             });
 
@@ -173,15 +172,6 @@ namespace testwebapicore.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Instructions>(entity =>
-            {
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Details).IsUnicode(false);
-
-                entity.Property(e => e.Image).IsUnicode(false);
-            });
-
             modelBuilder.Entity<PromotionCodes>(entity =>
             {
                 entity.HasKey(e => new { e.PromtionId, e.Code });
@@ -217,8 +207,6 @@ namespace testwebapicore.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Image).IsUnicode(false);
-
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -231,6 +219,8 @@ namespace testwebapicore.Models
 
             modelBuilder.Entity<Region>(entity =>
             {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -248,7 +238,7 @@ namespace testwebapicore.Models
                 entity.HasOne(d => d.Address)
                     .WithMany(p => p.Request)
                     .HasForeignKey(d => d.AddressId)
-                    .HasConstraintName("FK_Request_Address1");
+                    .HasConstraintName("FK_Request_Address");
 
                 entity.HasOne(d => d.Client)
                     .WithMany(p => p.Request)
@@ -258,7 +248,7 @@ namespace testwebapicore.Models
                 entity.HasOne(d => d.Collector)
                     .WithMany(p => p.Request)
                     .HasForeignKey(d => d.CollectorId)
-                    .HasConstraintName("FK_Request_User1");
+                    .HasConstraintName("FK_Request_User");
 
                 entity.HasOne(d => d.Schedule)
                     .WithMany(p => p.Request)
