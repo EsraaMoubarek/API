@@ -35,5 +35,20 @@ namespace testwebapicore.Models.repo
            // _db.SurveyQuestions.AddRange(survey);
             _db.SaveChanges();
         }
+        //public IEnumerable<SurveyQuestions> GetSurvey(int CId)
+        //{
+        //    List<SurveyQuestions> SurQus;
+        //      int SId = _db.Survey.Max(a => a.Id);
+        //    ServeyUsers serveyUsers = _db.ServeyUsers.SingleOrDefault(a => a.ClientId == CId && a.SurveyId == SId);
+        //    if(serveyUsers == null)
+        //    {
+        //      SurQus=  _db.SurveyQuestions.Where(a => a.SurveyId == SId).Select(a => new SurveyQuestions { Question = a.Question, ChoiceA = a.ChoiceA, ChoiceB = a.ChoiceB, ChoiceC = a.ChoiceC, ChoiceD = a.ChoiceD }).ToList();
+        //    }
+        //    else
+        //    {
+        //        SurQus=
+        //    }
+        //    return SurQus;
+        //}
     }
 }
