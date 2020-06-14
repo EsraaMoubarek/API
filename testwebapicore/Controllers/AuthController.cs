@@ -72,10 +72,10 @@ namespace testwebapicore.Controllers
             else
             {
                 ChartHub _connectedHub = new ChartHub();
-                var ConnectionID = _connectedHub.GetConnectionID();
+                //var ConnectionID = _connectedHub.GetConnectionID();
                 string rolename = client.Category.Name;
                 int UserId = client.Id;
-                _clientRepo.AddClientConnection(client.Id, ConnectionID);
+               // _clientRepo.AddClientConnection(client.Id, ConnectionID);
                 var claims = new[]
            {    new Claim("UserId",UserId.ToString()),
                 new Claim("role",rolename),
@@ -106,6 +106,7 @@ namespace testwebapicore.Controllers
         [HttpPost, Route("loginUser")]
         public IActionResult LoginUser(string username, string password)
         {
+        
 
             User user = _db.FindUser(username, password);
             if (user == null)

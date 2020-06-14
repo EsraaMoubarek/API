@@ -120,6 +120,9 @@ namespace testwebapicore.Models.repo
             int pointsCollected = (int)Math.Floor(NonOrganicWeight * (decimal)avg);
             req.Points = pointsCollected;
             _db.SaveChanges();
+            //add these points to his total points
+            Client client=  _db.Client.SingleOrDefault(a => a.Id == ClientID);
+            client.TotalPoints += pointsCollected;
             //notify el user
             string name = req.Client.ClientName;
             string msg = "You Collect";
