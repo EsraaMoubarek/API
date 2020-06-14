@@ -22,6 +22,7 @@ namespace testwebapicore.Models
         public virtual DbSet<ComapnyPromotion> ComapnyPromotion { get; set; }
         public virtual DbSet<Feedback> Feedback { get; set; }
         public virtual DbSet<FeedbackCategory> FeedbackCategory { get; set; }
+        public virtual DbSet<Instructions> Instructions { get; set; }
         public virtual DbSet<PromotionCodes> PromotionCodes { get; set; }
         public virtual DbSet<Promotions> Promotions { get; set; }
         public virtual DbSet<Region> Region { get; set; }
@@ -39,7 +40,6 @@ namespace testwebapicore.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=.;Database= WasteAppDb;Trusted_Connection=True;");
             }
         }
@@ -112,6 +112,7 @@ namespace testwebapicore.Models
                     .HasConstraintName("FK_Client_ClientCategory");
             });
 
+
             modelBuilder.Entity<ClientCategory>(entity =>
             {
                 entity.Property(e => e.Name)
@@ -139,6 +140,15 @@ namespace testwebapicore.Models
                     .HasMaxLength(20)
                     .IsUnicode(false);
             });
+            modelBuilder.Entity<Instructions>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Details).IsUnicode(false);
+
+                entity.Property(e => e.Image).IsUnicode(false);
+            });
+
 
             modelBuilder.Entity<Feedback>(entity =>
             {
@@ -199,6 +209,8 @@ namespace testwebapicore.Models
 
             modelBuilder.Entity<Promotions>(entity =>
             {
+                entity.Property(e => e.Image).IsUnicode(false);
+
                 entity.Property(e => e.DateFrom).HasColumnType("datetime");
 
                 entity.Property(e => e.DateTo).HasColumnType("datetime");
@@ -228,6 +240,8 @@ namespace testwebapicore.Models
                 entity.Property(e => e.NameArabic)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+
             });
 
             modelBuilder.Entity<Request>(entity =>
