@@ -18,10 +18,10 @@ namespace testwebapicore.HubConfig
            // string ConnectionID = Context.ConnectionId;
             return base.OnConnectedAsync();
         }
-        public string GetConnectionID()
-        {
-            string ConnectionID = Context.ConnectionId;
-            return ConnectionID;
-        }
+        //public string GetConnectionID()
+        //{
+        //    string ConnectionID = Context.ConnectionId;
+        //    return ConnectionID;
+        //}
     }
 }

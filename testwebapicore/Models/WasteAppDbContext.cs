@@ -219,14 +219,13 @@ namespace testwebapicore.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.DateFrom).HasColumnType("datetime");
+
+                entity.Property(e => e.DateTo).HasColumnType("datetime");
+
+                entity.Property(e => e.Details)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.Company)
-                    .WithMany(p => p.Promotions)
-                    .HasForeignKey(d => d.CompanyId)
-                    .HasConstraintName("FK_Promotions_ComapnyPromotion");
             });
 
             modelBuilder.Entity<Region>(entity =>
