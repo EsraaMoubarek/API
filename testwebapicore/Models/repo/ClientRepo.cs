@@ -414,8 +414,8 @@ namespace testwebapicore.Models.repo
         {
 
             return _db.Request.Where(x => x.ClientId == id &&
-            ((x.IsSeparated != null && (x.OrgaincWeight > 0 || x.NonOrganicWeight > 0)) && x.Schedule.Time < DateTime.Now)
-            || x.Schedule.Time > DateTime.Now)
+            (((x.IsSeparated != null && (x.OrgaincWeight > 0 || x.NonOrganicWeight > 0)) && x.Schedule.Time < DateTime.Now)
+            || x.Schedule.Time > DateTime.Now))
             .Select(x => new Request()
             {
                 Id = x.Id,
