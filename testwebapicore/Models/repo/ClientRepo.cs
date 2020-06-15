@@ -390,11 +390,11 @@ namespace testwebapicore.Models.repo
         public ClientConnection AddClientConnection(int ClientID, string ConnectionID)
         {
             ClientConnection con;
-            ClientConnection existingcon = _db.ClientConnection.Single(a => a.ClientId == ClientID);
-            if (existingcon != null)
+            con = _db.ClientConnection.FirstOrDefault(a => a.ClientId == ClientID);
+            if (con != null)
             {
-                existingcon.ConnectoinId = ConnectionID;
-                return existingcon;
+                con.ConnectoinId = ConnectionID;
+               // return existingcon;
 
             }
             else

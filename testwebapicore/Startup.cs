@@ -71,7 +71,7 @@ namespace testwebapicore
 
             }
             
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

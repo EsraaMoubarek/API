@@ -8,20 +8,23 @@ namespace testwebapicore.HubConfig
 {
     public class ChartHub: Hub
     {
-        
+        public static string ConnectionID;
+        public static string tosaveit;
         //public async Task NewMessage(string name,string msg,string points)
         //{
         //    await Clients.All.SendAsync("MessageReceived", name,msg, points.ToString());
         //}
         public override Task OnConnectedAsync()
         {
-           // string ConnectionID = Context.ConnectionId;
+             ConnectionID = Context.ConnectionId;
+            ConnectionID= GetConnectionID();
             return base.OnConnectedAsync();
         }
-        public string GetConnectionID()
+        public static string GetConnectionID()
         {
-            string ConnectionID = Context.ConnectionId;
-            return ConnectionID;
+             tosaveit = ConnectionID;
+            return tosaveit;
+          
         }
     }
 }
