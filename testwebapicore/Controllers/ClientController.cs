@@ -201,6 +201,19 @@ namespace testwebapicore.Controllers
             _db.UpdateClient(client);
             return Ok();
         }
-        
+
+        ///******** Request Part CONTINUE********/// 
+        /// 
+        /// <summary>
+        /// ////////////// Requests List 
+        /// </summary>
+        /// <returns></returns>
+
+        [HttpGet]
+        [Route("{id}")]
+        public ActionResult AllRequestsList(int id)
+        {
+            return Ok(_db.AllRequestsList(id));
+        }
     }
 }

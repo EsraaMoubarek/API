@@ -419,7 +419,50 @@ namespace testwebapicore.Models.repo
             return con;
         }
 
-       
+        /////All Requests List
+        public List<Request> AllRequestsList(int id)
+        {
+
+            return _db.Request.Where(x => x.ClientId == id &&
+            (((x.IsSeparated != null && (x.OrgaincWeight > 0 || x.NonOrganicWeight > 0)) && x.Schedule.Time < DateTime.Now)
+            || x.Schedule.Time > DateTime.Now))
+            .Select(x => new Request()
+            {
+                Id = x.Id,
+                ApartmentNumber = x.ApartmentNumber,
+                ClientId = x.ClientId,
+                ScheduleId = x.ScheduleId,
+                BuildingNumber = x.BuildingNumber,
+                Points = x.Points,
+                OrgaincWeight = x.OrgaincWeight,
+                NonOrganicWeight = x.NonOrganicWeight,
+                AddressId = x.AddressId,
+                CollectorId = x.CollectorId,
+                Rate = x.Rate,
+                IsSeparated = x.IsSeparated,
+                Schedule = new Schedule()
+                {
+                    Time = x.Schedule.Time
+                },
+                Address = new Address()
+                {
+                    StreetName = x.Address.StreetName
+                     ,
+                    Region = new Region()
+                    {
+                        Id = x.Address.Region.Id,
+                        Name = x.Address.Region.Name
+                    }
+                }
+                ,
+                Collector = new User()
+                {
+                    Id = x.Collector.Id,
+                    UserName = x.Collector.UserName
+                }
+            }).ToList();
+        }
+
 
     }
 }
