@@ -28,6 +28,7 @@ namespace testwebapicore.Controllers
             return Ok(r.GetRegions());
            
         }
+        [Route("GetRegion")]
         public IEnumerable<Region> GetRegion()
         {
             return r.AllRegions();

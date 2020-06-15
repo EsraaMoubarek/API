@@ -42,6 +42,7 @@ namespace testwebapicore.Controllers
         {
             return _addressRepo.streets(Id);
         }
+        [Route("{id}")]
         public IEnumerable<Address> GetAddress(int Id)
         {
             return _addressRepo.AddressIdAndStrs(Id);
