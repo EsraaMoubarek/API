@@ -43,8 +43,18 @@ namespace testwebapicore.Controllers
         {
 
 
-            return Ok(u.GetUsers().Where(a=>a.Role.Role1=="driver"));
-
+            return Ok(u.GetUsers().Where(a=>a.Role.Role1=="driver")
+                .Select(x=> new User() {
+                    Id = x.Id,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    RoleId = x.RoleId,
+                    PhoneNumber = x.PhoneNumber,
+                    Role = new Role() {
+                        Id = x.Role.Id,
+                        Role1 = x.Role.Role1
+                    }
+                }));
         }
         [Route("collector")]
 
@@ -52,7 +62,19 @@ namespace testwebapicore.Controllers
         {
 
 
-            return Ok(u.GetUsers().Where(a => a.Role.Role1 == "collector"));
+            return Ok(u.GetUsers().Where(a => a.Role.Role1 == "collector").Select(x => new User()
+            {
+                Id = x.Id,
+                UserName = x.UserName,
+                Email = x.Email,
+                RoleId = x.RoleId,
+                PhoneNumber = x.PhoneNumber,
+                Role = new Role()
+                {
+                    Id = x.Role.Id,
+                    Role1 = x.Role.Role1
+                }
+            }));
 
         }
         ///

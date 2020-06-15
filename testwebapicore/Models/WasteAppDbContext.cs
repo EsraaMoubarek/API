@@ -239,8 +239,6 @@ namespace testwebapicore.Models
                 entity.Property(e => e.NameArabic)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-
             });
 
             modelBuilder.Entity<Request>(entity =>

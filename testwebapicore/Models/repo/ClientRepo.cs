@@ -156,6 +156,8 @@ namespace testwebapicore.Models.repo
         }
         public void AddNewRequest(Request request)
         {
+           var scheduleCollectors =_db.ScheduleCollector.Where(x => x.ScheduleId == request.ScheduleId).ToList();
+            request.CollectorId = scheduleCollectors.Select(x=>x.CollectorId).First();
             _db.Request.Add(request);
             _db.SaveChanges();
         }
@@ -181,7 +183,9 @@ namespace testwebapicore.Models.repo
                     {
                         Time = x.Schedule.Time
                     }
-                }).Where(x => x.ClientId == id).ToList().Last();
+                }).Where(x => x.ClientId == id && (x.OrgaincWeight <=0 ||x.OrgaincWeight ==null )
+                && (x.NonOrganicWeight<=0 || x.NonOrganicWeight == null))
+                .ToList().First();
 
                 return request;
             }
