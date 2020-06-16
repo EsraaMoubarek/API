@@ -22,6 +22,7 @@ namespace testwebapicore.Models
         public virtual DbSet<ComapnyPromotion> ComapnyPromotion { get; set; }
         public virtual DbSet<Feedback> Feedback { get; set; }
         public virtual DbSet<FeedbackCategory> FeedbackCategory { get; set; }
+        public virtual DbSet<Instructions> Instructions { get; set; }
         public virtual DbSet<PromotionCodes> PromotionCodes { get; set; }
         public virtual DbSet<Promotions> Promotions { get; set; }
         public virtual DbSet<Region> Region { get; set; }
@@ -40,7 +41,7 @@ namespace testwebapicore.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=.;Database= WasteAppDb;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=wasteapp-server.database.windows.net;Database=WasteAppDb;User Id=dbAdmin;Password=Waste0123");
             }
         }
 
@@ -127,8 +128,8 @@ namespace testwebapicore.Models
                     .HasColumnName("ClientID")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.ConnectoinId)
-                    .HasColumnName("ConnectoinID")
+                entity.Property(e => e.ConnectionId)
+                    .HasColumnName("ConnectionID")
                     .IsUnicode(false);
             });
 
@@ -172,6 +173,15 @@ namespace testwebapicore.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Instructions>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Details).IsUnicode(false);
+
+                entity.Property(e => e.Image).IsUnicode(false);
+            });
+
             modelBuilder.Entity<PromotionCodes>(entity =>
             {
                 entity.HasKey(e => new { e.PromtionId, e.Code });
@@ -206,6 +216,8 @@ namespace testwebapicore.Models
                 entity.Property(e => e.Details)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Image).IsUnicode(false);
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
