@@ -128,8 +128,8 @@ namespace testwebapicore.Models.repo
             client.TotalPoints += pointsCollected;
             //notify el user
             string name = req.Client.ClientName;
-            string msg = "You Collect";
-            string ConnectionID = _db.ClientConnection.Single(c => c.ClientId == ClientID).ConnectoinId;
+            string msg = "You Collect"; 
+            string ConnectionID = _db.ClientConnection.Single(c => c.ClientId == ClientID).ConnectionId;
              //All Clients
               // _hub.Clients.All.SendAsync("MessageReceived", name, msg, pointsCollected.ToString());
              //Specific Client
