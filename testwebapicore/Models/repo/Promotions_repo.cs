@@ -22,7 +22,6 @@ namespace testwebapicore.Models.repo
         }
         public Promotions UploadPromotionsImage(string fileName,int id)
         {
-
             Promotions promotion = _db.Promotions.Find(id);
             promotion.Image = fileName;
             _db.SaveChanges();
@@ -40,19 +39,44 @@ namespace testwebapicore.Models.repo
                 { Details = x.Details, Image = x.Image,RequiredPoints = x.RequiredPoints }).ToList();
         }
         public bool DeletePromotion(int id) {
-            List<PromotionCodes> promotionCodes = _db.PromotionCodes
+
+            List<PromotionCodes> clientCodes = _db.PromotionCodes
                 .Where(x => x.PromtionId == id && x.ClientId != null).ToList();
-            if (promotionCodes.Count > 0)
+
+            List<PromotionCodes> promotionCodes = _db.PromotionCodes
+                .Where(x => x.PromtionId == id && x.ClientId == null).ToList();
+            if (clientCodes.Count > 0)
             {
                 return false;
             }
             else
             {
+                foreach (var promotioncode in promotionCodes) {
+                    _db.PromotionCodes.Remove(promotioncode);
+                }
+                _db.SaveChanges();
                 Promotions promotion = _db.Promotions.Find(id);
                 _db.Promotions.Remove(promotion);
                 _db.SaveChanges();
                 return true;
             }
+        }
+        public List<Promotions> GetPromotions() {
+            return _db.Promotions.Where(x => x.DateTo >= DateTime.Now)
+                .Select(x=>new Promotions() { 
+                    Id = x.Id ,
+                    Name = x.Name ,
+                    RequiredPoints = x.RequiredPoints,
+                     DateFrom = x.DateFrom,
+                     DateTo = x.DateTo,
+                     Details = x.Details,
+                     CompanyId = x.CompanyId,
+                     Company = new ComapnyPromotion() {
+                      Id = x.Company.Id,
+                      Name = x.Company.Name
+                     }
+                })
+                .ToList();
         }
     }
 }
