@@ -31,6 +31,11 @@ namespace WasteAppCoreDriver.Controllers
 
 
         }
+        [HttpGet("test")]
+        public IEnumerable<string> test()
+        {
+            return new string[] { "John Doe", "Jane Doe" };
+        }
 
 
         [HttpGet("getDriverSchedule/{driverId}")]

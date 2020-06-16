@@ -34,6 +34,7 @@ namespace testwebapicore
 
         // This method gets called by the runtime. Use this method to add services to the container.
         //Scaffold-DbContext "Server=.;Database= WasteAppDb;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
+        //Scaffold-DbContext "Server=wasteapp-server.database.windows.net;Database=WasteAppDb;User Id=dbAdmin;Password=Waste0123" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {

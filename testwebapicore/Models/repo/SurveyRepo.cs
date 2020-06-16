@@ -18,22 +18,45 @@ namespace testwebapicore.Models.repo
             survey.GenerationDate = DateTime.Today;
             _db.Survey.Add(survey);
             _db.SaveChanges();
-           // return survey;
         }
-        public void AddSurveyQuestions(List<SurveyQuestions> survey)
+        public void AddFixedQuestions(List<string> survey)
         {
             DateTime d = DateTime.Today;
-          List<int> s=  _db.Survey.Where(a => a.GenerationDate == d).Select(b => b.Id).ToList();
+            Survey s = _db.Survey.FirstOrDefault(a => a.GenerationDate == d);
             foreach (var item in survey)
             {
-                item.SurveyId = s[0];
-            }
+                SurveyQuestions survey1 = new SurveyQuestions();
+                  survey1.SurveyId = s.Id;
+                survey1.ChoiceA = "Not Satisfied";
+                survey1.ChoiceB = "partially Satisfied";
+                survey1.ChoiceC = "Satisfied";
+                survey1.ChoiceD = "More than Satisfied";
+                survey1.Question = item;
+                _db.SurveyQuestions.Add(survey1);
+                _db.SaveChanges();
+            }   
+        }
+            public void AddSurveyQuestions(List<SurveyQuestions> survey)
+        {
+            DateTime d = DateTime.Today;
+          Survey s=  _db.Survey.FirstOrDefault(a => a.GenerationDate == d);
             foreach (var item in survey)
             {
-                _db.SurveyQuestions.Add(item);
+                SurveyQuestions questions = new SurveyQuestions();
+                questions.SurveyId = s.Id;
+                questions.Question = item.Question/*"hhh"*/;
+                questions.ChoiceA = item.ChoiceA/*"hhh"*/;
+                questions.ChoiceB = item.ChoiceB /*"hhh"*/;
+                questions.ChoiceC = item.ChoiceC /*"hhh"*/;
+                _db.SurveyQuestions.Add(questions);
+                _db.SaveChanges();
             }
+            //foreach (var item in survey)
+            //{
+            //    _db.SurveyQuestions.Add(item);
+            //}
            // _db.SurveyQuestions.AddRange(survey);
-            _db.SaveChanges();
+            
         }
         //public IEnumerable<SurveyQuestions> GetSurvey(int CId)
         //{

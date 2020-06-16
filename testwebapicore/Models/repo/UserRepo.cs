@@ -119,6 +119,9 @@ namespace testwebapicore.Models.repo
             decimal? avg = GetSelectWasteToCalcAvgTotPrice();
             int pointsCollected = (int)Math.Floor(NonOrganicWeight * (decimal)avg);
             req.Points = pointsCollected;
+            //to add total points
+            req.Client.TotalPoints = req.Client.TotalPoints + pointsCollected;
+
             _db.SaveChanges();
             //add these points to his total points
             Client client=  _db.Client.SingleOrDefault(a => a.Id == ClientID);
@@ -126,7 +129,7 @@ namespace testwebapicore.Models.repo
             //notify el user
             string name = req.Client.ClientName;
             string msg = "You Collect";
-            string ConnectionID = _db.ClientConnection.Single(c => c.ClientId == ClientID).ConnectoinId;
+            string ConnectionID = _db.ClientConnection.Single(c => c.ClientId == ClientID).ConnectionId;
              //All Clients
               // _hub.Clients.All.SendAsync("MessageReceived", name, msg, pointsCollected.ToString());
              //Specific Client

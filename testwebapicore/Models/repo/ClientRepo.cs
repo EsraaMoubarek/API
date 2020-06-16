@@ -447,11 +447,11 @@ namespace testwebapicore.Models.repo
         public ClientConnection AddClientConnection(int ClientID, string ConnectionID)
         {
             ClientConnection con;
-            ClientConnection existingcon = _db.ClientConnection.Single(a => a.ClientId == ClientID);
-            if (existingcon != null)
+            con = _db.ClientConnection.FirstOrDefault(a => a.ClientId == ClientID);
+            if (con != null)
             {
-                existingcon.ConnectoinId = ConnectionID;
-                return existingcon;
+                con.ConnectionId = ConnectionID;
+               // return existingcon;
 
             }
             else
@@ -459,7 +459,7 @@ namespace testwebapicore.Models.repo
                 con = new ClientConnection();
 
                 con.ClientId = ClientID;
-                con.ConnectoinId = ConnectionID;
+                con.ConnectionId = ConnectionID;
                 _db.ClientConnection.Add(con);
             }
             _db.SaveChanges();
