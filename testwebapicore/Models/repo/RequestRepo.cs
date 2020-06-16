@@ -28,89 +28,104 @@ namespace testwebapicore.Models.repo
             return orderedRequests;
         }
 
-        public object AssignRequestsToCollectors()
+        public int AssignRequestsToCollectors()
         {
-            List<Request> requests = _db.Request.Where(r => r.Schedule.Time.Date >= DateTime.Now.Date).ToList();
-
-            List<Region> regions = requests.DistinctBy(r => r.Schedule.RegionId).Select(r => new Region()
+            try
             {
-                Id = (int)r.Schedule.RegionId,
-                Name = r.Schedule.Region.Name
-            }).ToList();
+                List<Request> requests = _db.Request.Where(r => r.Schedule.Time.Date == DateTime.Now.Date).ToList();
 
-            List<Request> arrangedrequests;
-            int numOfCollectors = 0;
-            int numOfRequests = 0;
-            int numOfRequestsPerCollector = 0;
-            List<ScheduleCollector> collectors = new List<ScheduleCollector>();
-            int scheduleId;
-            int counter;
-            int collectorFlag;
-            double[] temp = new double[2];
-            int tempCounter = 0;
-
-            foreach (var item in regions)
-            {
-                //get number of collectors per region
-                scheduleId = _db.Schedule.SingleOrDefault(s => s.RegionId == item.Id && s.Time.Date == DateTime.Now.Date).Id;
-                collectors = _db.ScheduleCollector.Where(s => s.ScheduleId == scheduleId).ToList();
-                numOfCollectors = collectors.Count;
-                //numOfCollectors = _context.ScheduleCollector.Where(s => s.ScheduleId == scheduleId).Count();
-
-
-                arrangedrequests = new List<Request>(ArrangeRequests(requests.Where(r => r.Schedule.RegionId == item.Id).ToList()).Select(r => new Request()
+                List<Region> regions = requests.DistinctBy(r => r.Schedule.RegionId).Select(r => new Region()
                 {
-                    Id = r.Id,
-                    ApartmentNumber = r.ApartmentNumber,
-                    ClientId = r.ClientId,
-                    ScheduleId = r.ScheduleId,
-                    BuildingNumber = r.BuildingNumber,
-                    Points = r.Points,
-                    OrgaincWeight = r.OrgaincWeight,
-                    NonOrganicWeight = r.NonOrganicWeight,
-                    AddressId = r.AddressId,
-                    CollectorId = r.CollectorId,
-                    Rate = r.Rate,
-                    IsSeparated = r.IsSeparated
-                }));
-                numOfRequests = arrangedrequests.Count;
-                if (numOfCollectors != 0)
-                {
-                    numOfRequestsPerCollector = numOfRequests / numOfCollectors;
-                    temp[tempCounter] = numOfRequestsPerCollector;
-                    tempCounter++;
-
-                    counter = 0;
-                    collectorFlag = 0;
-                    foreach (var request in arrangedrequests)
-                    {
-                        if (counter % numOfRequestsPerCollector == 0 && counter != 0)
-                        {
-                            counter = 0;
-                            collectorFlag++;
-                        }
-                        if (collectorFlag > numOfCollectors - 1)
-                            collectorFlag = 0;
-                        //request.CollectorId = collectors[collectorFlag].CollectorId;
-                        _db.Request.FirstOrDefault(r => r.Id == request.Id).CollectorId = collectors[collectorFlag].CollectorId;
-                        counter++;
-                    }
-                }
-            }
-
-            _db.SaveChanges();
-            requests = _db.Request.Where(r => r.Schedule.Time.Date >= DateTime.Now.Date)
-                .Select(r => new Request()
-                {
-                    Id = r.Id,
-                    ClientId = r.ClientId,
-                    CollectorId = r.CollectorId,
-                    ScheduleId = r.ScheduleId
+                    Id = (int)r.Schedule.RegionId,
+                    Name = r.Schedule.Region.Name
                 }).ToList();
 
-            Console.WriteLine("Assign Requests to Collectors");
+                List<Request> arrangedrequests;
+                int numOfCollectors = 0;
+                int numOfRequests = 0;
+                int numOfRequestsPerCollector = 0;
+                List<ScheduleCollector> collectors = new List<ScheduleCollector>();
+                Schedule schedule;
+                int scheduleId;
+                int counter;
+                int collectorFlag;
+                double[] temp = new double[2];
+                int tempCounter = 0;
 
-            return requests;
+                foreach (var item in regions)
+                {
+                    schedule = _db.Schedule.SingleOrDefault(s => s.RegionId == item.Id && s.Time.Date == DateTime.Now.Date);
+                    if (schedule != null)
+                    {
+                        //get number of collectors per region
+                        scheduleId = schedule.Id;
+                        collectors = _db.ScheduleCollector.Where(s => s.ScheduleId == scheduleId).ToList();
+                        numOfCollectors = collectors.Count;
+                        //numOfCollectors = _context.ScheduleCollector.Where(s => s.ScheduleId == scheduleId).Count();
+
+
+                        arrangedrequests = new List<Request>(ArrangeRequests(requests.Where(r => r.Schedule.RegionId == item.Id).ToList()).Select(r => new Request()
+                        {
+                            Id = r.Id,
+                            ApartmentNumber = r.ApartmentNumber,
+                            ClientId = r.ClientId,
+                            ScheduleId = r.ScheduleId,
+                            BuildingNumber = r.BuildingNumber,
+                            Points = r.Points,
+                            OrgaincWeight = r.OrgaincWeight,
+                            NonOrganicWeight = r.NonOrganicWeight,
+                            AddressId = r.AddressId,
+                            CollectorId = r.CollectorId,
+                            Rate = r.Rate,
+                            IsSeparated = r.IsSeparated
+                        }));
+                        numOfRequests = arrangedrequests.Count;
+                        if (numOfCollectors != 0)
+                        {
+                            numOfRequestsPerCollector = numOfRequests / numOfCollectors;
+                            temp[tempCounter] = numOfRequestsPerCollector;
+                            tempCounter++;
+
+                            counter = 0;
+                            collectorFlag = 0;
+                            foreach (var request in arrangedrequests)
+                            {
+                                if (counter % numOfRequestsPerCollector == 0 && counter != 0)
+                                {
+                                    counter = 0;
+                                    collectorFlag++;
+                                }
+                                if (collectorFlag > numOfCollectors - 1)
+                                    collectorFlag = 0;
+                                //request.CollectorId = collectors[collectorFlag].CollectorId;
+                                _db.Request.FirstOrDefault(r => r.Id == request.Id).CollectorId = collectors[collectorFlag].CollectorId;
+                                counter++;
+                            }
+                        }
+                    }
+                    
+                }
+
+                _db.SaveChanges();
+                //requests = _db.Request.Where(r => r.Schedule.Time.Date >= DateTime.Now.Date)
+                //    .Select(r => new Request()
+                //    {
+                //        Id = r.Id,
+                //        ClientId = r.ClientId,
+                //        CollectorId = r.CollectorId,
+                //        ScheduleId = r.ScheduleId
+                //    }).ToList();
+
+                //Console.WriteLine("Assign Requests to Collectors");
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine(ex);
+                return 0;
+            }
+
+            //return requests;
         }
 
         //return object of addressId and buildingNo only
