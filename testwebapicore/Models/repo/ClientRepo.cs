@@ -53,7 +53,7 @@ namespace testwebapicore.Models.repo
         {
 
             return _db.Request.Where(x => x.ClientId == id && x.IsSeparated !=null 
-            && (x.OrgaincWeight > 0 || x.NonOrganicWeight >0)).Select(x => new Request()
+            && (x.OrgaincWeight > 0 || x.NonOrganicWeight > 0)).Select(x => new Request()
             {
                 Id = x.Id,
                 ApartmentNumber = x.ApartmentNumber,
@@ -142,8 +142,13 @@ namespace testwebapicore.Models.repo
             return (addresses);
         }
 
-        public List<Schedule> getSchedules(int id)
+        public List<Schedule> getSchedules(int id,int clientId)
         {
+            List<Request> clientRequests = _db.Request
+                .Where(x => x.ClientId == clientId &&
+                 x.Schedule.RegionId == id &&
+                x.Schedule.Time >= DateTime.Now
+                ).ToList();
 
             List<Schedule> schedules = _db.Schedule.Select(x => new Schedule()
             {
@@ -152,14 +157,42 @@ namespace testwebapicore.Models.repo
                 DriverId = x.DriverId,
                 RegionId = x.RegionId
             }).Where(a => a.RegionId == id && a.Time >= DateTime.Now).ToList();
+
+            foreach (var request in clientRequests)
+            {
+                Schedule schedule = _db.Schedule.Find(request.ScheduleId);
+                schedules.RemoveAll(element => element.Id == schedule.Id);
+
+            }
             return schedules;
         }
         public void AddNewRequest(Request request)
         {
-           var scheduleCollectors =_db.ScheduleCollector.Where(x => x.ScheduleId == request.ScheduleId).ToList();
-            request.CollectorId = scheduleCollectors.Select(x=>x.CollectorId).First();
+            var schedule = _db.Schedule.Find(request.ScheduleId);
+
+            if (schedule.Time == DateTime.Now.Date) {
+                
+                var requests = _db.Request.Where(x => x.ScheduleId == request.ScheduleId
+                    && x.AddressId == request.AddressId
+                ).ToList();
+
+                if (requests != null)
+                {
+                    request.CollectorId = requests.Select(x => x.CollectorId).First();
+                }
+                else 
+                {
+                    var scheduleCollectors = _db.ScheduleCollector
+                    .Where(x => x.ScheduleId == request.ScheduleId).ToList();
+                    request.CollectorId = scheduleCollectors.Select(x => x.CollectorId).First();
+                }
+            }
+            else{
+                request.CollectorId = null;
+            }
             _db.Request.Add(request);
             _db.SaveChanges();
+      
         }
         public Request GetCurrentRequest(int id)
         {
@@ -182,6 +215,16 @@ namespace testwebapicore.Models.repo
                     Schedule = new Schedule()
                     {
                         Time = x.Schedule.Time
+                        ,Region = new Region() {
+                            Id = x.Schedule.Region.Id,
+                            Name = x.Schedule.Region.Name,
+                            NameArabic = x.Schedule.Region.NameArabic
+                        }
+                    }
+                    ,Address = new Address() {
+                        Id = x.Address.Id,
+                        StreetName = x.Address.StreetName,
+                        StreetNameArabic= x.Address.StreetNameArabic
                     }
                 }).Where(x => x.ClientId == id && (x.OrgaincWeight <=0 ||x.OrgaincWeight ==null )
                 && (x.NonOrganicWeight<=0 || x.NonOrganicWeight == null))

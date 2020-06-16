@@ -39,5 +39,20 @@ namespace testwebapicore.Models.repo
                 .Select(x=> new Promotions() 
                 { Details = x.Details, Image = x.Image,RequiredPoints = x.RequiredPoints }).ToList();
         }
+        public bool DeletePromotion(int id) {
+            List<PromotionCodes> promotionCodes = _db.PromotionCodes
+                .Where(x => x.PromtionId == id && x.ClientId != null).ToList();
+            if (promotionCodes.Count > 0)
+            {
+                return false;
+            }
+            else
+            {
+                Promotions promotion = _db.Promotions.Find(id);
+                _db.Promotions.Remove(promotion);
+                _db.SaveChanges();
+                return true;
+            }
+        }
     }
 }

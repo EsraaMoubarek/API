@@ -11,7 +11,7 @@ using System.Net.Http.Headers;
 
 namespace testwebapicore.Controllers
 {
-    
+
     [ApiController]
     public class AdminController : ControllerBase
     {
@@ -23,9 +23,9 @@ namespace testwebapicore.Controllers
         comp_prom_repo comp;
         Promotions_repo prom;
         promcodes_repo code;
-       
-        
-        public AdminController(SchedulRepo schdb, Sch_col_Repo scoldb, RegionRepo regdb, UserRepo u, AddressRepo addb, comp_prom_repo _comp, Promotions_repo _prom,promcodes_repo _code)
+
+
+        public AdminController(SchedulRepo schdb, Sch_col_Repo scoldb, RegionRepo regdb, UserRepo u, AddressRepo addb, comp_prom_repo _comp, Promotions_repo _prom, promcodes_repo _code)
         {
             this.schdb = schdb;
             this.scoldb = scoldb;
@@ -37,14 +37,14 @@ namespace testwebapicore.Controllers
             this.code = _code;
         }
 
-        
+
         [Route("driver")]
         public ActionResult getdrivers()
         {
 
 
-            return Ok(u.GetUsers().Where(a=>a.Role.Role1=="driver")
-                .Select(x=> new User() {
+            return Ok(u.GetUsers().Where(a => a.Role.Role1 == "driver")
+                .Select(x => new User() {
                     Id = x.Id,
                     UserName = x.UserName,
                     Email = x.Email,
@@ -105,7 +105,7 @@ namespace testwebapicore.Controllers
         [HttpPost]
         public ActionResult addcomp(ComapnyPromotion cp)
         {
-             //= new ComapnyPromotion();
+            //= new ComapnyPromotion();
             //cp.Name = ncp.Name;
             //IFormFile pic = ncp.Logo;
 
@@ -123,7 +123,7 @@ namespace testwebapicore.Controllers
         [HttpPost]
         public ActionResult addpromotion(Promotions p)
         {
-           
+
 
 
             return Ok(prom.addprom(p));
@@ -247,7 +247,7 @@ namespace testwebapicore.Controllers
                     {
                         file.CopyTo(stream);
                     }
-                    return Ok(prom.UploadPromotionsImage(fileName,id));
+                    return Ok(prom.UploadPromotionsImage(fileName, id));
                 }
                 else
                 {
@@ -269,6 +269,23 @@ namespace testwebapicore.Controllers
             }
             catch (Exception ex)
             {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
+        [HttpDelete]
+        [Route("api/admin/deletepromotion/{id}")]
+        public IActionResult DeletePromotion(int id) {
+            try
+            {
+                if (prom.DeletePromotion(id))
+                {
+                    return Ok();
+                }
+                else {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex) {
                 return StatusCode(500, $"Internal server error: {ex}");
             }
         }

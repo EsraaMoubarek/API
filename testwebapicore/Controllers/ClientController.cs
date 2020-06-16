@@ -122,18 +122,25 @@ namespace testwebapicore.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
-        public ActionResult getSchedules(int id)
+        [Route("{regionId}/{clientId}")]
+        public ActionResult getSchedules(int regionId,int clientId)
         {
-            return Ok(_db.getSchedules(id));
+            return Ok(_db.getSchedules(regionId, clientId));
         }
 
         [HttpPost]
       //  [Route("newRequest/AddNewRequest")]
         public ActionResult AddNewRequest([FromBody] Request request)
         {
-            _db.AddNewRequest(request);
-            return Ok(request);
+            try
+            {
+                _db.AddNewRequest(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
         }
         /// <summary>
         /// ////////////// Current Request 
