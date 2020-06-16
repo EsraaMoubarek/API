@@ -23,17 +23,27 @@ namespace testwebapicore.Controllers
         [HttpGet]
         //public void Getsurvey()
         //{
-          //Survey survey=  _surveyRepo.AddSurvey();
-          //  return survey;
-      // return Ok(survey);
-       // }
+        //Survey survey=  _surveyRepo.AddSurvey();
+        //  return survey;
+        // return Ok(survey);
+        // }
+        public void GetAddSurvey()
+        {
+            _surveyRepo.AddSurvey();
+           
+        }
         [HttpPost]
         public void PostAddSurvey(List<SurveyQuestions> sq)
         {
-            _surveyRepo.AddSurvey();
             _surveyRepo.AddSurveyQuestions(sq);
            // return Ok(sq);
-        } 
+        }
+        public void PostFixedQues(List<string> sq)
+        { 
+            _surveyRepo.AddFixedQuestions(sq);
+            // return Ok(sq);
+        }
+
         public IActionResult GetSurvey(int CId)
         {
             List<SurveyQuestions> SurQus;
