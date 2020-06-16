@@ -15,7 +15,11 @@ namespace testwebapicore.Models.repo
         }
         public List<Region> GetRegions()
         {
-            return db.Region.ToList();
+            return db.Region.Select(x=>new Region() { 
+                Id = x.Id,
+                Name = x.Name,
+                NameArabic = x.NameArabic
+            }).ToList();
         }
         public Region GetRegionById(int regionId)
         {

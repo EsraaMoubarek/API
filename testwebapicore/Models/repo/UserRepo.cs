@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using testwebapicore.HubConfig;
 
 namespace testwebapicore.Models.repo
 {
     public class UserRepo
     {
         WasteAppDbContext _db;
-        public UserRepo(WasteAppDbContext db)
+        private IHubContext<ChartHub> _hub;
+
+        public UserRepo(WasteAppDbContext db, IHubContext<ChartHub> hub)
         {
             this._db = db;
+            _hub = hub;
         }
         public List<User> GetUsers()
         {
@@ -96,6 +101,7 @@ namespace testwebapicore.Models.repo
 
 
         }
+
         public object CollectorProfile(int ColectorID)
         {
             return _db.User.Where(c => c.Id == ColectorID).Select(c => new { c.UserName, c.PhoneNumber, c.Email });
@@ -105,7 +111,47 @@ namespace testwebapicore.Models.repo
         {
             return _db.User.Where(a => a.Id == id).Select(b => new User { UserName = b.UserName }).First();
         }
+        public void AddPoints(int ClientID, int NonOrganicWeight, int reqID)
+        {
+            // return  _db.user  .Where(c => c.Id == ColectorID).Select(c => new { c.UserName, c.PhoneNumber, c.Email });
 
-        
+            Request req = _db.Request.Single(c => c.Id == reqID);
+            decimal? avg = GetSelectWasteToCalcAvgTotPrice();
+            int pointsCollected = (int)Math.Floor(NonOrganicWeight * (decimal)avg);
+            req.Points = pointsCollected;
+            //to add total points
+            req.Client.TotalPoints = req.Client.TotalPoints + pointsCollected;
+
+            _db.SaveChanges();
+            //add these points to his total points
+            Client client=  _db.Client.SingleOrDefault(a => a.Id == ClientID);
+            client.TotalPoints += pointsCollected;
+            //notify el user
+            string name = req.Client.ClientName;
+            string msg = "You Collect";
+            string ConnectionID = _db.ClientConnection.Single(c => c.ClientId == ClientID).ConnectoinId;
+             //All Clients
+              // _hub.Clients.All.SendAsync("MessageReceived", name, msg, pointsCollected.ToString());
+             //Specific Client
+            _hub.Clients.Client(ConnectionID).SendAsync("MessageReceived", name, msg, pointsCollected.ToString());
+
+        }
+
+        public decimal? SelectWasteToCalcAvgTotPrice()
+        {
+            decimal? totalPrice = 0;
+            List<Waste> Wastes = _db.Waste.Select(a => new Waste { Name = a.Name, Price = a.Price, Percent = a.Percent }).ToList();
+            foreach (var item in Wastes)
+            {
+                totalPrice += (item.Percent * item.Price) / 100;
+            }
+            decimal? AvgTotalPrice = totalPrice / 1000;
+            return AvgTotalPrice;
+        }
+        public decimal? GetSelectWasteToCalcAvgTotPrice()
+        {
+            return SelectWasteToCalcAvgTotPrice();
+        }
+
     }
 }

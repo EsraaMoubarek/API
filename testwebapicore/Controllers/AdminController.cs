@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using testwebapicore.Models;
 using testwebapicore.Models.repo;
 using System.IO;
-
+using System.Net.Http.Headers;
 
 namespace testwebapicore.Controllers
 {
@@ -43,8 +43,18 @@ namespace testwebapicore.Controllers
         {
 
 
-            return Ok(u.GetUsers().Where(a=>a.Role.Role1=="driver"));
-
+            return Ok(u.GetUsers().Where(a=>a.Role.Role1=="driver")
+                .Select(x=> new User() {
+                    Id = x.Id,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    RoleId = x.RoleId,
+                    PhoneNumber = x.PhoneNumber,
+                    Role = new Role() {
+                        Id = x.Role.Id,
+                        Role1 = x.Role.Role1
+                    }
+                }));
         }
         [Route("collector")]
 
@@ -52,7 +62,19 @@ namespace testwebapicore.Controllers
         {
 
 
-            return Ok(u.GetUsers().Where(a => a.Role.Role1 == "collector"));
+            return Ok(u.GetUsers().Where(a => a.Role.Role1 == "collector").Select(x => new User()
+            {
+                Id = x.Id,
+                UserName = x.UserName,
+                Email = x.Email,
+                RoleId = x.RoleId,
+                PhoneNumber = x.PhoneNumber,
+                Role = new Role()
+                {
+                    Id = x.Role.Id,
+                    Role1 = x.Role.Role1
+                }
+            }));
 
         }
         ///
@@ -195,5 +217,61 @@ namespace testwebapicore.Controllers
             todaySchedule.RemoveAt(0);
             return Ok(todaySchedule);
         }
+
+        [HttpPost, DisableRequestSizeLimit]
+        [Route("api/admin/UploadPromotionsImage/{id}")]
+        public IActionResult UploadPromotionsImage(int id)
+        {
+            try
+            {
+                Guid guid = Guid.NewGuid();
+                string str = guid.ToString();
+
+                var file = Request.Form.Files[0];
+                var folderName = Path.Combine("Resources", "Images");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                if (file.Length > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue
+                        .Parse(file.ContentDisposition).FileName.Trim('"').ToString();
+
+                    fileName = Path.GetFileNameWithoutExtension(fileName) + str
+                        + Path.GetExtension(fileName);
+
+                    var fullPath = Path.Combine(pathToSave, fileName);
+
+                    var dbPath = Path.Combine(folderName, fileName);
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                    return Ok(prom.UploadPromotionsImage(fileName,id));
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
+
+        [HttpGet]
+        [Route("api/admin/GetPromotionsImage")]
+        public IActionResult GetPromotionsImage() {
+            try
+            {
+                return Ok(prom.GetPromotionsImage());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
+
     }
 }

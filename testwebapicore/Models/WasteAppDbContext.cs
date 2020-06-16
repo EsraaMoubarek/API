@@ -40,8 +40,7 @@ namespace testwebapicore.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=wasteapp-server.database.windows.net;Database=WasteAppDb;User Id=dbAdmin;Password=Waste0123");
+                optionsBuilder.UseSqlServer("Server=.;Database= WasteAppDb;Trusted_Connection=True;");
             }
         }
 
@@ -113,6 +112,7 @@ namespace testwebapicore.Models
                     .HasConstraintName("FK_Client_ClientCategory");
             });
 
+
             modelBuilder.Entity<ClientCategory>(entity =>
             {
                 entity.Property(e => e.Name)
@@ -128,8 +128,8 @@ namespace testwebapicore.Models
                     .HasColumnName("ClientID")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.ConnectionId)
-                    .HasColumnName("ConnectionID")
+                entity.Property(e => e.ConnectoinId)
+                    .HasColumnName("ConnectoinID")
                     .IsUnicode(false);
             });
 
@@ -140,6 +140,15 @@ namespace testwebapicore.Models
                     .HasMaxLength(20)
                     .IsUnicode(false);
             });
+            modelBuilder.Entity<Instructions>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Details).IsUnicode(false);
+
+                entity.Property(e => e.Image).IsUnicode(false);
+            });
+
 
             modelBuilder.Entity<Feedback>(entity =>
             {
@@ -173,15 +182,6 @@ namespace testwebapicore.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Instructions>(entity =>
-            {
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Details).IsUnicode(false);
-
-                entity.Property(e => e.Image).IsUnicode(false);
-            });
-
             modelBuilder.Entity<PromotionCodes>(entity =>
             {
                 entity.HasKey(e => new { e.PromtionId, e.Code });
@@ -209,6 +209,8 @@ namespace testwebapicore.Models
 
             modelBuilder.Entity<Promotions>(entity =>
             {
+                entity.Property(e => e.Image).IsUnicode(false);
+
                 entity.Property(e => e.DateFrom).HasColumnType("datetime");
 
                 entity.Property(e => e.DateTo).HasColumnType("datetime");
@@ -217,16 +219,13 @@ namespace testwebapicore.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Image).IsUnicode(false);
+                entity.Property(e => e.DateFrom).HasColumnType("datetime");
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.DateTo).HasColumnType("datetime");
+
+                entity.Property(e => e.Details)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.Company)
-                    .WithMany(p => p.Promotions)
-                    .HasForeignKey(d => d.CompanyId)
-                    .HasConstraintName("FK_Promotions_ComapnyPromotion");
             });
 
             modelBuilder.Entity<Region>(entity =>
