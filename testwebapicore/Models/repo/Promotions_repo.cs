@@ -30,12 +30,14 @@ namespace testwebapicore.Models.repo
         }
 
         public List<Promotions> GetPromotionsImage() {
-            DateTime date = DateTime.Now;
+            DateTime date = DateTime.Today.AddDays(-7);
+         
+            //List<Promotions> promotions = _db.Promotions.Where(x => x.DateFrom >= date
+            //&& x.Image != null).ToList();
 
-            List<Promotions> promotions = _db.Promotions.Where(x => x.DateFrom >= DateTime.Now && x.Image != null).ToList();
-            return _db.Promotions.Where(x => x.DateFrom >= DateTime.Now&& x.Image != null)
-                .Select(x=> new Promotions() { Details = x.Details,
-                    Image = x.Image }).ToList();
+            return _db.Promotions.Where(x => x.DateFrom >= date && x.Image != null)
+                .Select(x=> new Promotions() 
+                { Details = x.Details, Image = x.Image,RequiredPoints = x.RequiredPoints }).ToList();
         }
     }
 }

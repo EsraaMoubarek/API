@@ -19,12 +19,15 @@ namespace testwebapicore.Models.repo
         public void RegisterApartment(Client client)
         {
             client.CategoryId = 1;
+            client.ClientName = "DUMMY";
             _db.Client.Add(client);
             _db.SaveChanges();
         }
         public void RegisterRestrnt(Client client)
         {
             client.CategoryId = 2;
+
+            client.ClientName = "DUMMY";
             _db.Client.Add(client);
             _db.SaveChanges();
         }
@@ -153,31 +156,42 @@ namespace testwebapicore.Models.repo
         }
         public void AddNewRequest(Request request)
         {
+           var scheduleCollectors =_db.ScheduleCollector.Where(x => x.ScheduleId == request.ScheduleId).ToList();
+            request.CollectorId = scheduleCollectors.Select(x=>x.CollectorId).First();
             _db.Request.Add(request);
             _db.SaveChanges();
         }
         public Request GetCurrentRequest(int id)
         {
-            Request request = _db.Request.Select(x => new Request()
+            try
             {
-                Id = x.Id,
-                ApartmentNumber = x.ApartmentNumber,
-                ClientId = x.ClientId,
-                ScheduleId = x.ScheduleId,
-                BuildingNumber = x.BuildingNumber,
-                Points = x.Points,
-                OrgaincWeight = x.OrgaincWeight,
-                NonOrganicWeight = x.NonOrganicWeight,
-                AddressId = x.AddressId,
-                CollectorId = x.CollectorId,
-                Rate = x.Rate,
-                IsSeparated = x.IsSeparated,
-                Schedule = new Schedule()
+                Request request = _db.Request.Select(x => new Request()
                 {
-                    Time = x.Schedule.Time
-                }
-            }).Where(x => x.ClientId == id).ToList().Last();
-            return request;
+                    Id = x.Id,
+                    ApartmentNumber = x.ApartmentNumber,
+                    ClientId = x.ClientId,
+                    ScheduleId = x.ScheduleId,
+                    BuildingNumber = x.BuildingNumber,
+                    Points = x.Points,
+                    OrgaincWeight = x.OrgaincWeight,
+                    NonOrganicWeight = x.NonOrganicWeight,
+                    AddressId = x.AddressId,
+                    CollectorId = x.CollectorId,
+                    Rate = x.Rate,
+                    IsSeparated = x.IsSeparated,
+                    Schedule = new Schedule()
+                    {
+                        Time = x.Schedule.Time
+                    }
+                }).Where(x => x.ClientId == id && (x.OrgaincWeight <=0 ||x.OrgaincWeight ==null )
+                && (x.NonOrganicWeight<=0 || x.NonOrganicWeight == null))
+                .ToList().First();
+
+                return request;
+            }
+            catch {
+                return new Request() { };
+            }
         }
 
         public Request DeleteRequest(int id)
@@ -390,11 +404,11 @@ namespace testwebapicore.Models.repo
         public ClientConnection AddClientConnection(int ClientID, string ConnectionID)
         {
             ClientConnection con;
-            ClientConnection existingcon = _db.ClientConnection.Single(a => a.ClientId == ClientID);
-            if (existingcon != null)
+            con = _db.ClientConnection.FirstOrDefault(a => a.ClientId == ClientID);
+            if (con != null)
             {
-                existingcon.ConnectoinId = ConnectionID;
-                return existingcon;
+                con.ConnectoinId = ConnectionID;
+               // return existingcon;
 
             }
             else

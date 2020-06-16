@@ -119,6 +119,9 @@ namespace testwebapicore.Models.repo
             decimal? avg = GetSelectWasteToCalcAvgTotPrice();
             int pointsCollected = (int)Math.Floor(NonOrganicWeight * (decimal)avg);
             req.Points = pointsCollected;
+            //to add total points
+            req.Client.TotalPoints = req.Client.TotalPoints + pointsCollected;
+
             _db.SaveChanges();
             //add these points to his total points
             Client client=  _db.Client.SingleOrDefault(a => a.Id == ClientID);
