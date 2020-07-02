@@ -39,6 +39,22 @@ namespace testwebapicore.Controllers
 
         }
 
+        [Route("doneclientlist")]
+        public ActionResult DoneClientList(int CollectorID)
+        {
+            List<ClientListModel> clientLists = new List<ClientListModel>();
+            // return Content("IN Action");
+            if (CollectorID != 0)
+            {
+                return Ok(_db.GetDoneClientList(CollectorID));
+            }
+            else
+            {
+                return Content("NO Clients Today");
+            }
+
+        }
+
         //public IEnumerable<string> test()
         //{
         //    return new string[] { "tessssst", "Jane Doe" };

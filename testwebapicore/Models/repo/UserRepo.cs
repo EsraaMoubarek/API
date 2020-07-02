@@ -62,7 +62,7 @@ namespace testwebapicore.Models.repo
         public List<ClientListModel> GetClientList(int CollectorID)
         {
             List<ClientListModel> clientLists = new List<ClientListModel>();
-            var Clients = _db.Request.Where(c => c.CollectorId == CollectorID).
+            var Clients = _db.Request.Where(c => c.CollectorId == CollectorID && (c.OrgaincWeight==0 || c.NonOrganicWeight==0)).
                 Select(a =>
             new ClientListModel
             {
@@ -76,6 +76,39 @@ namespace testwebapicore.Models.repo
                 Date = a.Schedule.Time,
                 ScheduleID = a.Schedule.Id,//to add weight
                 NonOrganicWeight = a.NonOrganicWeight,
+                OrganicWeight = a.OrgaincWeight,
+                ClientPhoneNumber = a.Client.Mobile //addedNew
+            });
+
+            foreach (var client in Clients)
+            {
+
+                if (client.Date.ToString("yyyy/MM/dd") == DateTime.Now.ToString("yyyy/MM/dd"))
+                {
+                    clientLists.Add(client);
+                }
+            }
+            return clientLists;
+        }
+
+        public List<ClientListModel> GetDoneClientList(int CollectorID)
+        {
+            List<ClientListModel> clientLists = new List<ClientListModel>();
+            var Clients = _db.Request.Where(c => c.CollectorId == CollectorID && (c.OrgaincWeight > 0 || c.NonOrganicWeight > 0)).
+                Select(a =>
+            new ClientListModel
+            {
+                ClientID = a.Client.Id, //to add weight
+                ClientFirstName = a.Client.FirstName,
+                ClientLastName = a.Client.LastName,
+                ClientApartmentNumber = a.ApartmentNumber,
+                ClientBuildingNumber = a.BuildingNumber,
+                ClientStreetName = a.Address.StreetNameArabic,
+                ClientRegionName = a.Address.Region.NameArabic,
+                Date = a.Schedule.Time,
+                ScheduleID = a.Schedule.Id,//to add weight
+                NonOrganicWeight = a.NonOrganicWeight,
+                OrganicWeight = a.OrgaincWeight,
                 ClientPhoneNumber = a.Client.Mobile //addedNew
             });
 
