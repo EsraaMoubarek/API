@@ -129,7 +129,7 @@ namespace testwebapicore.Models
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.ConnectionId)
-                    .HasColumnName("ConnectoinID")
+                    .HasColumnName("ConnectionID")
                     .IsUnicode(false);
             });
 

@@ -41,6 +41,13 @@ namespace testwebapicore.Models.repo
         public Schedule deleteSchedule(int id)
         {
             Schedule s = db.Schedule.FirstOrDefault(a => a.Id == id);
+            List<Request> requests = db.Request.Where(x => x.ScheduleId == id).ToList();
+            if (requests.Count > 0) {
+                foreach (var request in requests) {
+                    db.Request.Remove(db.Request.Find(request.Id));
+                }
+                db.SaveChanges();
+            }
             db.Schedule.Remove(s);
             db.SaveChanges();
             return (s);
